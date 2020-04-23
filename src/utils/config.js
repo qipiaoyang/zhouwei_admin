@@ -1,0 +1,9 @@
+export const TOKEN = 'token'; // 设置token常量
+export const USERINFO = 'userinfo'; // 设置userinfo常量
+export const PERMISSSION = 'permission';// 设置权限常量
+export const PAGELIST = [10, 20, 30, 40]; // 页码列表
+export const DEFAULTPAGESIZE = 10; //默认页大小为10条
+export const DEFAULTPAGE = 1; // 默认显示页大小
+export const SORTFIELD = ""; //默认为空
+export const SORTORDER = "desc"; //默认为倒序排列
+export const UPLOADURL = "https://yx.lemonbus.cn/admin/upload/articleImage";// 上传
