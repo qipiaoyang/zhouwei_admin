@@ -15,3 +15,11 @@ export function logout() {
     method: 'post'
   })
 }
+
+
+export function getUserInfo() {
+  return request({
+    url: 'admin/v1/auth/userInfo',
+    method: 'get'
+  })
+}

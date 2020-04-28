@@ -26,7 +26,7 @@ export const constantRoutes = [
       path: 'home',
       name: 'Home',
       component: () => import('@/views/home/index'),
-      meta: { title: '首页', icon: 'dashboard' }
+      meta: { title: '订单', icon: 'dashboard' }
     }]
   },
   {
@@ -35,7 +35,7 @@ export const constantRoutes = [
     redirect: '/system/user',
     name: 'System',
     meta: {
-      title: '系统设置',
+      title: '管理模块',
       icon: 'nested'
     },
     children: [
@@ -49,25 +49,7 @@ export const constantRoutes = [
         path: 'role',
         name: 'role',
         component: () => import('@/views/system/role/index'),
-        meta: { title: '角色列表' }
-      },
-      {
-        path: 'menu',
-        name: 'menu',
-        component: () => import('@/views/system/menu/index'),
-        meta: { title: '菜单列表' }
-      },
-      {
-        path: 'resource',
-        name: 'resource',
-        component: () => import('@/views/system/resource/index'),
-        meta: { title: '资源列表' }
-      },
-      {
-        path: 'resource_category',
-        name: 'resource_category',
-        component: () => import('@/views/system/resource_category/index'),
-        meta: { title: '资源分类列表' }
+        meta: { title: '订单列表' }
       },
     ]
   },

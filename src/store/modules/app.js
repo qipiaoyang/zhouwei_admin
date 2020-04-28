@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import { getToken, setToken, removeToken } from '@/utils/auth';
-import { logout, login } from "@/api/auth.js";
+import { logout, login, getUserInfo } from "@/api/auth.js";
 import { resetRouter } from '@/router'
 
 const state = {
@@ -12,6 +12,7 @@ const state = {
   token: getToken(),
   name: '',
   avatar: '',
+  admin_id: ""
 }
 
 const mutations = {
@@ -37,6 +38,9 @@ const mutations = {
   },
   SET_NAME: (state, name) => {
     state.name = name
+  },
+  SET_ADMIN_ID: (state, admin_id) => {
+    state.admin_id = admin_id;
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
@@ -70,29 +74,23 @@ const actions = {
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      // getInfo(state.token).then(response => {
-      //   const { data } = response
-
-      //   if (!data) {
-      //     reject('Verification failed, please Login again.')
-      //   }
-
-      //   const { name, avatar } = data
-
-      //   commit('SET_NAME', name)
-      //   commit('SET_AVATAR', avatar)
-      //   resolve(data)
-      // }).catch(error => {
-      //   reject(error)
-      // })
-      commit('SET_NAME', "Super Admin")
-      commit('SET_AVATAR', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif');
-      resolve({
-        roles: ['admin'],
-        introduction: 'I am a super administrator',
-        avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-        name: 'Super Admin'
-      });
+      getUserInfo(state.token).then(response => {
+        const { data } = response
+        const { name, id } = data
+        // resolve({
+        //   roles: ['admin'],
+        //   introduction: 'I am a super administrator',
+        //   avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+        //   name: 'Super Admin'
+        // });
+        commit('SET_NAME', name)
+        commit('SET_ADMIN_ID', id)
+        commit('SET_AVATAR', "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif")
+        resolve(data)
+      }).catch(error => {
+        reject(error)
+      })
+      
     })
   },
 

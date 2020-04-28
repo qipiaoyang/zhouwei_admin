@@ -2,8 +2,12 @@
   <div class="app-container">
     <div class="filter-container">
       <el-form :inline="true" :model="listQuery" @submit.native.prevent>
-        <el-form-item label="角色名" class="filter-item">
-          <el-input v-model="listQuery.role_name" placeholder="请输入角色名" style="width: 200px;" class="filter-item"
+        <el-form-item label="用户名" class="filter-item">
+          <el-input v-model="listQuery.role_name" placeholder="请输入用户名" style="width: 200px;" class="filter-item"
+                    @keyup.enter.native="handleFilter"/>
+        </el-form-item>
+        <el-form-item label="用户手机号" class="filter-item">
+          <el-input v-model="listQuery.mobile" placeholder="请输入用户手机号" style="width: 200px;" class="filter-item"
                     @keyup.enter.native="handleFilter"/>
         </el-form-item>
         <el-form-item  class="filter-item">
@@ -14,7 +18,7 @@
         <el-form-item  class="filter-item">
           <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit"
                      @click="handleCreate">
-            添加角色
+            添加订单
           </el-button>
         </el-form-item>
         <el-form-item  class="filter-item">
@@ -43,14 +47,19 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="角色名"  align="center">
+      <el-table-column label="用户名"  align="center">
         <template slot-scope="{row}">
-          <span>{{ row.role_name }}</span>
+          <span>{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="描述" align="center">
+      <el-table-column label="用户手机号"  align="center">
         <template slot-scope="{row}">
-          <span>{{ row.role_desc }}</span>
+          <span>{{ row.mobile }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="用户地址"  align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.mobile }}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" align="center">
@@ -60,7 +69,7 @@
       </el-table-column>
       <el-table-column label="状态" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.status | userstatus }}</span>
+          <span>{{ row.status | payStatus }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
@@ -126,11 +135,11 @@
       getList() {
         this.$store.dispatch("auth_role/getAuthRoleList");
       },
-      // 创建角色
+      // 创建订单
       handleCreate() {
         this.$store.commit("auth_role/SET_ADDVISIBLE", true);
       },
-      //编辑角色
+      //编辑订单
       handleUpdate(row) {
         this.$store.dispatch("auth_role/getAuthRoleInfo", row.id);
       },

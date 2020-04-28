@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: '熊猫商城后台管理系统',
+  title: '后台管理系统',
 
   /**
    * @type {boolean} true | false

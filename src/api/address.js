@@ -4,7 +4,7 @@ import request from '@/utils/request'
  * 获取用户列表
  * @param params
  */
-export function getAuthRoleList(params) {
+export function getAddressList(params) {
   return request({
     url: 'admin/v1/address',
     method: 'get',
@@ -16,7 +16,7 @@ export function getAuthRoleList(params) {
  * 获取用户信息
  * @param params
  */
-export function getAuthRoleInfo(id) {
+export function getAddressInfo(id) {
   return request({
     url: 'admin/v1/address/' + id,
     method: 'get',
@@ -28,7 +28,7 @@ export function getAuthRoleInfo(id) {
  * 新增用户
  * @param params
  */
-export function createAuthRole(data) {
+export function createAddress(data) {
   return request({
     url: 'admin/v1/address',
     method: 'post',
@@ -41,7 +41,7 @@ export function createAuthRole(data) {
  * 编辑用户
  * @param params
  */
-export function updateAuthRole({id, data}) {
+export function updateAddress({id, data}) {
   return request({
     url: 'admin/v1/address/' + id,
     method: 'put',
@@ -54,7 +54,7 @@ export function updateAuthRole({id, data}) {
  * 删除用户
  * @param params
  */
-export function deleteAuthRole(id) {
+export function deleteAddress(id) {
   return request({
     url: 'admin/v1/address' + id,
     method: 'delete',
