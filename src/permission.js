@@ -5,6 +5,7 @@ import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
+import Layout from '@/layout'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
@@ -32,7 +33,43 @@ router.beforeEach(async(to, from, next) => {
       } else {
         try {
           // get user info
-          await store.dispatch('app/getInfo')
+          const data = await store.dispatch('app/getInfo');
+          console.log(data,"data=====")
+          if(data.dept_id == 1) {
+            const accessRoutes = [{
+                path: '/system',
+                component: Layout,
+                redirect: '/system/user',
+                name: 'System',
+                meta: {
+                  title: '管理模块',
+                  icon: 'nested'
+                },
+                children: [
+                  {
+                    path: 'user',
+                    name: 'user',
+                    component: () => import('@/views/system/user/index'),
+                    meta: { title: '用户列表' }
+                  },
+                  {
+                    path: 'dept',
+                    name: 'dept',
+                    component: () => import('@/views/system/dept/index'),
+                    meta: { title: '小组列表' }
+                  },
+                  {
+                    path: 'role',
+                    name: 'role',
+                    component: () => import('@/views/system/role/index'),
+                    meta: { title: '订单列表' }
+                  },
+                ]
+              },
+              { path: '*', redirect: '/404', hidden: true }];
+              router.addRoutes(accessRoutes);
+              console.log(router,"router")
+          }
 
           next()
         } catch (error) {

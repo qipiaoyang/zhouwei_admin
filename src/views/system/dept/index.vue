@@ -6,18 +6,18 @@
           <el-input v-model="listQuery.name" placeholder="请输入用户名" style="width: 200px;" class="filter-item"
                     @keyup.enter.native="handleFilter"/>
         </el-form-item>
-        <el-form-item class="filter-item">
+        <el-form-item  class="filter-item">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             搜索
           </el-button>
         </el-form-item>
-        <el-form-item class="filter-item">
+        <el-form-item  class="filter-item">
           <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit"
                      @click="handleCreate">
-            添加用户
+            添加小组
           </el-button>
         </el-form-item>
-        <el-form-item class="filter-item">
+        <el-form-item  class="filter-item">
           <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh"
                      @click="resetList">
             重置
@@ -30,7 +30,7 @@
     <el-table
       :key="tableKey"
       v-loading="listLoading"
-      :data="userList"
+      :data="list"
       border
       fit
       highlight-current-row
@@ -43,32 +43,18 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="姓名" align="center">
+      <el-table-column label="部门名称"  align="center">
         <template slot-scope="{row}">
-          <span>{{ row.username }}</span>
+          <span>{{ row.name}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="邮箱" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.email }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="手机号" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.mobile }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="小组名" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.dept_name }}</span>
-        </template>
-      </el-table-column>
+
       <el-table-column label="状态" align="center">
         <template slot-scope="{row}">
           <span>{{ row.status | userstatus }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" class-name="status-col">
+      <el-table-column label="创建时间" class-name="status-col" >
         <template slot-scope="{row}">
           <span>{{ row.update_time }}</span>
         </template>
@@ -94,7 +80,7 @@
 </template>
 
 <script>
-  import {mapState} from "vuex";
+  import { mapState } from "vuex";
 
   import Pagination from '@/components/Pagination';
   import EditComponent from './edit/index.vue';
@@ -102,7 +88,7 @@
 
 
   export default {
-    name: 'user_list',
+    name: 'dept_list',
 
     components: {
       Pagination,
@@ -115,49 +101,47 @@
       }
     },
     created() {
-      this.$store.dispatch("user/getUserList");
+      this.$store.dispatch("dept/getDeptList");
     },
     computed: {
       ...mapState({
-        token: state => state.user.token,
-        userList: state => state.user.userList,
-        listQuery: state => state.user.listQuery,
-        total: state => state.user.total,
-        listLoading: state => state.user.listLoading,
+        token: state => state.dept.token,
+        list: state => state.dept.list,
+        listQuery: state => state.dept.listQuery,
+        total: state => state.dept.total,
+        listLoading: state => state.dept.listLoading,
       })
     },
     methods: {
       // 重置功能
       resetList() {
-        this.$store.commit("user/RESET_LISTQUERY")
-        this.$store.dispatch("user/getUserList");
+        this.$store.commit("dept/RESET_LISTQUERY")
+        this.$store.dispatch("dept/getDeptList");
       },
       // 获取列表
       getList() {
-        this.$store.dispatch("user/getUserList");
+        this.$store.dispatch("dept/getDeptList");
       },
       // 创建用户
       handleCreate() {
-        this.$store.dispatch("area/getDeptList");
-        this.$store.commit("user/SET_ADDVISIBLE", true);
+        this.$store.commit("dept/SET_ADDVISIBLE", true);
       },
       //编辑用户
       handleUpdate(row) {
-        this.$store.dispatch("area/getDeptList");
-        this.$store.dispatch("user/getUserInfo", row.id);
+        this.$store.dispatch("dept/getDeptInfo", row.id);
       },
       // 启用禁用
       handleVisible(row) {
         var that = this;
-        this.$store.commit("user/SET_ID", row.id);
-        this.$store.dispatch("user/changeVisibleUser", {status: row.status ? 0 : 1}).then((e) => {
-          if (e.success) {
+        this.$store.commit("dept/SET_ID", row.id);
+        this.$store.dispatch("dept/changeVisibleDept", {status: row.status ? 0 : 1}).then((e) => {
+          if(e.success) {
             that.$notify({
               title: row.status ? '禁用成功' : "启用成功",
               type: 'success',
               duration: 2000
             });
-            that.$store.dispatch("user/getUserList");
+            that.$store.dispatch("dept/getDeptList");
           } else {
             that.$notify({
               title: row.staus ? '禁用失败' : "启用失败",
@@ -170,21 +154,21 @@
       // 过滤
       handleFilter() {
         this.listQuery.page = 1;
-        this.$store.commit("user/SET_LISTQUERY", this.listQuery)
-        this.$store.dispatch("user/getUserList");
+        this.$store.commit("dept/SET_LISTQUERY", this.listQuery)
+        this.$store.dispatch("dept/getDeptList");
       },
       sortChange(data) {
         const {prop, order} = data
         if (prop === 'id') {
-          if (order === "ascending") {
+          if(order === "ascending") {
             this.listQuery.sortOrder = "asc"
-          } else if (order === "descending") {
+          } else if(order === "descending") {
             this.listQuery.sortOrder = "desc";
           } else {
             this.listQuery.sortOrder = null;
           }
-          this.$store.commit("user/SET_LISTQUERY", this.listQuery)
-          this.$store.dispatch("user/getUserList");
+          this.$store.commit("dept/SET_LISTQUERY", this.listQuery)
+          this.$store.dispatch("dept/getDeptList");
         }
       },
       getSortClass: function (key) {

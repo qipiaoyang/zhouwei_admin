@@ -10,14 +10,17 @@
     >
       <el-form-item label="地址信息" prop="address">
         <el-cascader
-          v-model="formObj.address"
           :options="options"
+          :props="props"
+          v-model="formObj.address"
           style="width: 400px;"
-          :props="{ 
-            expandTrigger: 'hover',
-            value: 'id'
-          }"
+          @change="addressChange"
         ></el-cascader>
+      </el-form-item>
+      <el-form-item label="乡镇" prop="town">
+        <el-select v-model="formObj.town" placeholder="请选择乡镇" clearable style="width: 400px">
+          <el-option v-for="(item,index) in townList" :key="index" :label="item.label" :value="item.id" />
+        </el-select>
       </el-form-item>
       <el-form-item label="详细地址" prop="address_desc">
         <el-input v-model="formObj.address_desc" placeholder="请输入详细地址" style="width: 400px;"/>
@@ -38,18 +41,19 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
-
 export default {
   name: "Home",
   computed: {
     ...mapGetters(["name"]),
     ...mapState({
-      options: state => state.area.tree,
       admin_id: state => state.app.admin_id,
+      dept_id: state => state.app.dept_id,
+      options: state => state.area.tree,
+      townList: state => state.area.townList
     })
   },
   created() {
-    this.$store.dispatch("area/getAreaTree");
+    this.$store.dispatch("area/getAreaTree", 0);
   },
   data() {
     return {
@@ -61,22 +65,33 @@ export default {
           { required: true, message: "请输入地址详细信息", trigger: "blur" }
         ],
         name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+        town: [{ required: true, message: "请输入乡镇", trigger: "blur" }],
         mobile: [{ required: true, message: "请输入手机号", trigger: "blur" }]
       },
       formObj: {
         address: [],
         address_desc: "",
         mobile: "",
-        name: ""
+        name: "",
+        town: "",
+      },
+      props: {
+        value: 'id',
+        children: 'children'
       }
     };
   },
   methods: {
+    addressChange(e) {
+      this.formObj.town = "";
+      this.$store.dispatch("area/getTownList", { pid: e[2] })
+    },
     createData() {
       let that = this;
       this.$refs["dataForm"].validate(valid => {
         if (valid) {
           that.formObj.admin_id = that.admin_id;
+          that.formObj.dept_id = that.dept_id;
           this.$store
             .dispatch("address/createAddress", this.formObj)
             .then(e => {
@@ -90,7 +105,8 @@ export default {
                   address: [],
                   address_desc: "",
                   mobile: "",
-                  name: ""
+                  name: "",
+                  town: "",
                 };
               } else {
                 that.$notify({

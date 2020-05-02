@@ -3,13 +3,8 @@
     <el-form ref="dataForm" :rules="rules" :model="datainfo" label-position="left" label-width="100px"
              style="width: 400px; margin-left:50px;">
 
-      <el-form-item label="用户名" prop="username">
-        <el-input v-model="datainfo.username" placeholder="请输入用户名"/>
-      </el-form-item>
-      <el-form-item label="小组" prop="dept_id">
-        <el-select v-model="datainfo.dept_id" placeholder="请选择小组" clearable style="width: 300px">
-          <el-option v-for="(item,index) in deptList" :key="index" :label="item.name" :value="item.id" />
-        </el-select>
+      <el-form-item label="用户名" prop="deptname">
+        <el-input v-model="datainfo.deptname" placeholder="请输入用户名"/>
       </el-form-item>
       <el-form-item label="手机号" prop="mobile">
         <el-input v-model="datainfo.mobile" placeholder="请输入手机号"/>
@@ -45,28 +40,27 @@
     },
     computed: {
       ...mapState({
-        editVisible: state => state.user.editVisible,
-        datainfo: state => state.user.datainfo,
-        deptList: state => state.area.deptList
+        editVisible: state => state.dept.editVisible,
+        datainfo: state => state.dept.datainfo,
       }),
     },
     methods: {
       cancelDialog() {
-        this.$store.commit("user/SET_EDITVISIBLE", false);
+        this.$store.commit("dept/SET_EDITVISIBLE", false);
       },
       updateData() {
         let that = this;
         this.$refs['dataForm'].validate((valid) => {
           if(valid) {
-            this.$store.dispatch("user/updateUser", that.datainfo).then((e) => {
+            this.$store.dispatch("dept/updateUser", that.datainfo).then((e) => {
               if(e.success) {
                 that.$notify({
                   title: '编辑用户成功',
                   type: 'success',
                   duration: 2000
                 });
-                that.$store.commit("user/RESET_LISTQUERY");
-                that.$store.dispatch("user/getUserList");
+                that.$store.commit("dept/RESET_LISTQUERY");
+                that.$store.dispatch("dept/getUserList");
               } else {
                 that.$notify({
                   title: '编辑用户失败',

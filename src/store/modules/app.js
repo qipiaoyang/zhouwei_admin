@@ -12,7 +12,8 @@ const state = {
   token: getToken(),
   name: '',
   avatar: '',
-  admin_id: ""
+  admin_id: "",
+  dept_id: "",
 }
 
 const mutations = {
@@ -41,6 +42,9 @@ const mutations = {
   },
   SET_ADMIN_ID: (state, admin_id) => {
     state.admin_id = admin_id;
+  },
+  SET_DEPT_ID: (state, dept_id) => {
+    state.dept_id = dept_id;
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
@@ -76,7 +80,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       getUserInfo(state.token).then(response => {
         const { data } = response
-        const { name, id } = data
+        const { name, id, dept_id } = data
         // resolve({
         //   roles: ['admin'],
         //   introduction: 'I am a super administrator',
@@ -85,12 +89,13 @@ const actions = {
         // });
         commit('SET_NAME', name)
         commit('SET_ADMIN_ID', id)
+        commit('SET_DEPT_ID', dept_id)
         commit('SET_AVATAR', "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif")
         resolve(data)
       }).catch(error => {
         reject(error)
       })
-      
+
     })
   },
 

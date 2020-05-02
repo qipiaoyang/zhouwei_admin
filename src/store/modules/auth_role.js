@@ -10,8 +10,11 @@ const state = {
   listQuery: {
     page: 1,
     size: 10,
-    role_name: undefined,
+    name: undefined,
     order: "id desc",
+    time: [],
+    dept_id: "",
+    mobile: "",
   },
   datainfo: {
     role_name: "",
@@ -49,8 +52,11 @@ const mutations = {
     state.listQuery = {
       page: 1,
       size: 10,
-      role_name: undefined,
+      name: undefined,
       order: "id desc",
+      time: [],
+      dept_id: "",
+      mobile: "",
     }
   }
 }
@@ -59,7 +65,17 @@ const actions = {
   // 获取列表
   async getAuthRoleList({commit, state}) {
     commit("SET_LISTLOADING", true);
-    await getAuthRoleList(state.listQuery).then(response => {
+    const data = {
+      page: state.listQuery.page,
+      size: state.listQuery.size,
+      name: state.listQuery.name,
+      order: state.listQuery.order,
+      start_time: new Date(state.listQuery.time[0]).getTime(),
+      end_time: new Date(state.listQuery.time[1]).getTime(),
+      dept_id: state.listQuery.dept_id,
+      mobile: state.listQuery.mobile,
+    }
+    await getAuthRoleList(data).then(response => {
       if (response.errno === 0) {
         commit("SET_ROLELIST", response.data.data);
         commit("SET_TOTAL", response.data.count);

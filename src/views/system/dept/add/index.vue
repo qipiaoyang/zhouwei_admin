@@ -3,22 +3,11 @@
     <el-form ref="dataForm" :rules="rules" :model="formObj" label-position="left" label-width="100px"
              style="width: 400px; margin-left:50px;">
 
-      <el-form-item label="用户名" prop="username">
-        <el-input v-model="formObj.username" placeholder="请输入用户名"/>
+      <el-form-item label="小组名称" prop="deptname">
+        <el-input v-model="formObj.name" placeholder="请输入用户名"/>
       </el-form-item>
-      <el-form-item label="小组" prop="dept_id">
-        <el-select v-model="formObj.dept_id" placeholder="请选择小组" clearable style="width: 300px">
-          <el-option v-for="(item,index) in deptList" :key="index" :label="item.name" :value="item.id"/>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input v-model="formObj.password" placeholder="请输入密码"/>
-      </el-form-item>
-      <el-form-item label="手机号" prop="mobile">
-        <el-input v-model="formObj.mobile" placeholder="请输入手机号"/>
-      </el-form-item>
-      <el-form-item label="邮箱" prop="mobile">
-        <el-input v-model="formObj.email" placeholder="请输入邮箱"/>
+      <el-form-item label="排序" prop="mobile">
+        <el-input v-model="formObj.sort" placeholder="请输入排序"/>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -45,44 +34,37 @@
           title: [{required: true, message: 'title is required', trigger: 'blur'}]
         },
         formObj: {
-          username: "",
-          password: "",
-          mobile: "",
-          email: "",
-          dept_id: ""
+          name: "",
+          sort: 0,
         }
       }
     },
     computed: {
       ...mapState({
-        addVisible: state => state.user.addVisible,
-        deptList: state => state.area.deptList
+        addVisible: state => state.dept.addVisible,
       }),
     },
     methods: {
       cancelDialog() {
-        this.$store.commit("user/SET_ADDVISIBLE", false);
+        this.$store.commit("dept/SET_ADDVISIBLE", false);
       },
       createData() {
         let that = this;
         this.$refs['dataForm'].validate((valid) => {
-          if (valid) {
-            this.$store.dispatch("user/createUser", this.formObj).then((e) => {
-              if (e.success) {
+          if(valid) {
+            this.$store.dispatch("dept/createDept", this.formObj).then((e) => {
+              if(e.success) {
                 that.$notify({
                   title: '添加用户成功',
                   type: 'success',
                   duration: 2000
                 });
                 that.formObj = {
-                  username: "",
-                  password: "",
-                  mobile: "",
-                  email: "",
-                  dept_id: ""
+                    name: "",
+                    sort: 0,
                 };
-                that.$store.commit("user/RESET_LISTQUERY");
-                that.$store.dispatch("user/getUserList");
+                that.$store.commit("dept/RESET_LISTQUERY");
+                that.$store.dispatch("dept/getDeptList");
               } else {
                 that.$notify({
                   title: '添加用户失败',

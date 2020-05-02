@@ -29,32 +29,39 @@ export const constantRoutes = [
       meta: { title: '订单', icon: 'dashboard' }
     }]
   },
-  {
-    path: '/system',
-    component: Layout,
-    redirect: '/system/user',
-    name: 'System',
-    meta: {
-      title: '管理模块',
-      icon: 'nested'
-    },
-    children: [
-      {
-        path: 'user',
-        name: 'user',
-        component: () => import('@/views/system/user/index'),
-        meta: { title: '用户列表' }
-      },
-      {
-        path: 'role',
-        name: 'role',
-        component: () => import('@/views/system/role/index'),
-        meta: { title: '订单列表' }
-      },
-    ]
-  },
-  { path: '*', redirect: '/404', hidden: true }
 ]
+
+export const accessRoutes = [{
+  path: '/system',
+  component: Layout,
+  redirect: '/system/user',
+  name: 'System',
+  meta: {
+    title: '管理模块',
+    icon: 'nested'
+  },
+  children: [
+    {
+      path: 'user',
+      name: 'user',
+      component: () => import('@/views/system/user/index'),
+      meta: { title: '用户列表' }
+    },
+    {
+      path: 'dept',
+      name: 'dept',
+      component: () => import('@/views/system/dept/index'),
+      meta: { title: '小组列表' }
+    },
+    {
+      path: 'role',
+      name: 'role',
+      component: () => import('@/views/system/role/index'),
+      meta: { title: '订单列表' }
+    },
+  ]
+},
+  { path: '*', redirect: '/404', hidden: true }];
 
 const createRouter = () => new Router({
   mode: 'history', // require service support

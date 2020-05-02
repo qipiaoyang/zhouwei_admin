@@ -1,10 +1,10 @@
-import {getUserList, createUser, getUserInfo, updateUser } from "@/api/auth_user.js";
+import {getDeptList, createDept, getDeptInfo, updateDept } from "@/api/dept.js";
 
 const state = {
 
   editVisible: false, // 编辑弹窗状态
   addVisible: false, // 编辑弹窗状态
-  userList: [], // 用户列表
+  list: [], // 用户列表
   total: 0,
   id: "",
   listQuery: {
@@ -17,7 +17,6 @@ const state = {
     username: "",
     mobile: "",
     email: "",
-    dept_id: ""
   }, // 用户信息
   listLoading: false,
 }
@@ -29,8 +28,8 @@ const mutations = {
   SET_ADDVISIBLE: (state, addVisible) => {
     state.addVisible = addVisible;
   },
-  SET_USERLIST: (state, userList) => {
-    state.userList = userList;
+  SET_LIST: (state, list) => {
+    state.list = list;
   },
   SET_LISTQUERY: (state, listQuery) => {
     state.listQuery = listQuery;
@@ -59,26 +58,25 @@ const mutations = {
 
 const actions = {
   // 获取列表
-  async getUserList({commit, state}) {
+  async getDeptList({commit, state}) {
     commit("SET_LISTLOADING", true);
-    await getUserList(state.listQuery).then(response => {
+    await getDeptList(state.listQuery).then(response => {
       if (response.errno === 0) {
-        commit("SET_USERLIST", response.data.data);
+        commit("SET_LIST", response.data.data);
         commit("SET_TOTAL", response.data.count);
         commit("SET_LISTLOADING", false);
       }
     })
   },
   // 获取用户信息
-  async getUserInfo({commit, state}, id) {
+  async getDeptInfo({commit, state}, id) {
     commit("SET_LISTLOADING", true);
-    await getUserInfo(id).then(response => {
+    await getDeptInfo(id).then(response => {
       if (response.errno === 0) {
         commit("SET_DATAINFO", {
           username: response.data.username,
           mobile: response.data.mobile,
           email: response.data.email,
-          dept_id: response.data.dept_id
         });
         commit("SET_ID", response.data.id);
         commit("SET_EDITVISIBLE", true);
@@ -87,9 +85,9 @@ const actions = {
     })
   },
   // 新建用户
-  async createUser({commit, dispatch}, data) {
+  async createDept({commit, dispatch}, data) {
     var that = this;
-    const result = await createUser(data).then((e) => {
+    const result = await createDept(data).then((e) => {
       if (e.errno === 0) {
         commit("SET_ADDVISIBLE", false);
 
@@ -101,9 +99,9 @@ const actions = {
     return result;
   },
   // 编辑用户
-  async updateUser({commit, dispatch, state}, data) {
+  async updateDept({commit, dispatch, state}, data) {
     var that = this;
-    const result = await updateUser({ id: state.id, data: data }).then((e) => {
+    const result = await updateDept({ id: state.id, data: data }).then((e) => {
       if (e.errno === 0) {
         commit("SET_EDITVISIBLE", false);
         commit("SET_ID", "");
@@ -112,7 +110,6 @@ const actions = {
           username: "",
           mobile: "",
           email: "",
-          dept_id: ""
         })
 
         return {success: true};
@@ -123,8 +120,8 @@ const actions = {
     return result;
   },
   // 启用禁用状态
-  async changeVisibleUser({ commit, dispatch, state }, data) {
-    const result = await dispatch("updateUser", data);
+  async changeVisibleDept({ commit, dispatch, state }, data) {
+    const result = await dispatch("updateDept", data);
     return result;
   }
 }

@@ -3,12 +3,29 @@
     <div class="filter-container">
       <el-form :inline="true" :model="listQuery" @submit.native.prevent>
         <el-form-item label="用户名" class="filter-item">
-          <el-input v-model="listQuery.role_name" placeholder="请输入用户名" style="width: 200px;" class="filter-item"
+          <el-input v-model="listQuery.name" placeholder="请输入用户名" style="width: 200px;" class="filter-item"
                     @keyup.enter.native="handleFilter"/>
+        </el-form-item>
+        <el-form-item label="小组">
+          <el-select v-model="listQuery.dept_id" placeholder="请选择小组" clearable style="width: 300px">
+            <el-option v-for="(item,index) in deptList" :key="index" :label="item.name" :value="item.id"/>
+          </el-select>
         </el-form-item>
         <el-form-item label="用户手机号" class="filter-item">
           <el-input v-model="listQuery.mobile" placeholder="请输入用户手机号" style="width: 200px;" class="filter-item"
                     @keyup.enter.native="handleFilter"/>
+        </el-form-item>
+        <el-form-item label="开始结束时间" class="filter-item">
+          <el-date-picker
+            v-model="listQuery.time"
+            type="datetimerange"
+            :picker-options="pickerOptions"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            @keyup.enter.native="handleFilter"
+            align="right">
+          </el-date-picker>
         </el-form-item>
         <el-form-item  class="filter-item">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -52,6 +69,11 @@
           <span>{{ row.name }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="小组名称"  align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.dept_name }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="用户手机号"  align="center">
         <template slot-scope="{row}">
           <span>{{ row.mobile }}</span>
@@ -59,7 +81,8 @@
       </el-table-column>
       <el-table-column label="用户地址"  align="center">
         <template slot-scope="{row}">
-          <span>{{ row.mobile }}</span>
+          <span v-if="row.province_num != row.city_num">{{ row.province }}{{ row.city }}{{ row.county}}{{row.town}}{{row.addr}}</span>
+          <span v-else>{{ row.province }}{{ row.county}}{{row.addr}}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" align="center">
@@ -111,10 +134,38 @@
     data() {
       return {
         tableKey: 0,
+        pickerOptions: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
+          }]
+        },
       }
     },
     created() {
       this.$store.dispatch("auth_role/getAuthRoleList");
+      this.$store.dispatch("area/getDeptList");
     },
     computed: {
       ...mapState({
@@ -123,6 +174,7 @@
         listQuery: state => state.auth_role.listQuery,
         total: state => state.auth_role.total,
         listLoading: state => state.auth_role.listLoading,
+        deptList: state => state.area.deptList
       })
     },
     methods: {
