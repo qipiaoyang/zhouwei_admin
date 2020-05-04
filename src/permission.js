@@ -35,17 +35,12 @@ router.beforeEach(async (to, from, next) => {
         try {
           // get user info
           const data = await store.dispatch('app/getInfo');
-          if (data.dept_id == 1) {
             const asyncRoutes = await store.dispatch("permission/generateRoutes", {dept_id: data.dept_id});
             router.addRoutes(asyncRoutes);
-            console.log(router, "1111")
             next({
               ...to,
               replace: false
             })
-          }
-
-
         } catch (error) {
           // remove token and go to login page to re-login
           await store.dispatch('app/resetToken')
