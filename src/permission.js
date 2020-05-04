@@ -1,17 +1,18 @@
 import router from './router'
 import store from './store'
-import { Message } from 'element-ui'
+import {Message} from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-import { getToken } from '@/utils/auth' // get token from cookie
+import {getToken} from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
 import Layout from '@/layout'
+import { accessRoutes } from '@/router'
 
-NProgress.configure({ showSpinner: false }) // NProgress Configuration
+NProgress.configure({showSpinner: false}) // NProgress Configuration
 
 const whiteList = ['/login'] // no redirect whitelist
 
-router.beforeEach(async(to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   // start progress bar
   NProgress.start()
 
@@ -24,54 +25,58 @@ router.beforeEach(async(to, from, next) => {
   if (hasToken) {
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
-      next({ path: '/' })
+      next({path: '/'})
       NProgress.done()
     } else {
-      const hasGetUserInfo = store.getters.name
+      const hasGetUserInfo = store.getters.admin_id
       if (hasGetUserInfo) {
         next()
       } else {
         try {
           // get user info
           const data = await store.dispatch('app/getInfo');
-          console.log(data,"data=====")
-          if(data.dept_id == 1) {
-            const accessRoutes = [{
-                path: '/system',
-                component: Layout,
-                redirect: '/system/user',
-                name: 'System',
-                meta: {
-                  title: '管理模块',
-                  icon: 'nested'
-                },
-                children: [
-                  {
-                    path: 'user',
-                    name: 'user',
-                    component: () => import('@/views/system/user/index'),
-                    meta: { title: '用户列表' }
-                  },
-                  {
-                    path: 'dept',
-                    name: 'dept',
-                    component: () => import('@/views/system/dept/index'),
-                    meta: { title: '小组列表' }
-                  },
-                  {
-                    path: 'role',
-                    name: 'role',
-                    component: () => import('@/views/system/role/index'),
-                    meta: { title: '订单列表' }
-                  },
-                ]
-              },
-              { path: '*', redirect: '/404', hidden: true }];
+          console.log(data, "data=====")
+          if (data.dept_id == 1) {
+            // const accessRoutes = [{
+            //     path: '/system',
+            //     component: Layout,
+            //     redirect: '/system/user',
+            //     name: 'System',
+            //     meta: {
+            //       title: '管理模块',
+            //       icon: 'nested'
+            //     },
+            //     children: [
+            //       {
+            //         path: 'user',
+            //         name: 'user',
+            //         component: () => import('@/views/system/user/index'),
+            //         meta: {title: '用户列表'}
+            //       },
+            //       {
+            //         path: 'dept',
+            //         name: 'dept',
+            //         component: () => import('@/views/system/dept/index'),
+            //         meta: {title: '小组列表'}
+            //       },
+            //       {
+            //         path: 'role',
+            //         name: 'role',
+            //         component: () => import('@/views/system/role/index'),
+            //         meta: {title: '订单列表'}
+            //       },
+            //     ]
+            //   },
+            //   {path: '*', redirect: '/404', hidden: true}];
               router.addRoutes(accessRoutes);
-              console.log(router,"router")
+            console.log(accessRoutes, "1111")
+            next({
+                ...to,
+                replace: false
+              })
           }
 
-          next()
+
         } catch (error) {
           // remove token and go to login page to re-login
           await store.dispatch('app/resetToken')
