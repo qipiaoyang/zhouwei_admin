@@ -31,7 +31,7 @@ export const constantRoutes = [
   },
 ]
 
-export const accessRoutes = [{
+export const asyncRoutes = [{
   path: '/system',
   component: Layout,
   redirect: '/system/user',

@@ -6,7 +6,7 @@ import 'nprogress/nprogress.css' // progress bar style
 import {getToken} from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
 import Layout from '@/layout'
-import { accessRoutes } from '@/router'
+import {accessRoutes} from '@/router'
 
 NProgress.configure({showSpinner: false}) // NProgress Configuration
 
@@ -35,45 +35,14 @@ router.beforeEach(async (to, from, next) => {
         try {
           // get user info
           const data = await store.dispatch('app/getInfo');
-          console.log(data, "data=====")
           if (data.dept_id == 1) {
-            // const accessRoutes = [{
-            //     path: '/system',
-            //     component: Layout,
-            //     redirect: '/system/user',
-            //     name: 'System',
-            //     meta: {
-            //       title: '管理模块',
-            //       icon: 'nested'
-            //     },
-            //     children: [
-            //       {
-            //         path: 'user',
-            //         name: 'user',
-            //         component: () => import('@/views/system/user/index'),
-            //         meta: {title: '用户列表'}
-            //       },
-            //       {
-            //         path: 'dept',
-            //         name: 'dept',
-            //         component: () => import('@/views/system/dept/index'),
-            //         meta: {title: '小组列表'}
-            //       },
-            //       {
-            //         path: 'role',
-            //         name: 'role',
-            //         component: () => import('@/views/system/role/index'),
-            //         meta: {title: '订单列表'}
-            //       },
-            //     ]
-            //   },
-            //   {path: '*', redirect: '/404', hidden: true}];
-              router.addRoutes(accessRoutes);
-            console.log(accessRoutes, "1111")
+            const asyncRoutes = await store.dispatch("permission/generateRoutes", {dept_id: data.dept_id});
+            router.addRoutes(asyncRoutes);
+            console.log(router, "1111")
             next({
-                ...to,
-                replace: false
-              })
+              ...to,
+              replace: false
+            })
           }
 
 
