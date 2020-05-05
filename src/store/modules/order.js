@@ -13,7 +13,6 @@ const state = {
     name: undefined,
     order: "id desc",
     time: [],
-    dept_id: "",
     mobile: "",
   },
   datainfo: {
@@ -55,7 +54,6 @@ const mutations = {
       name: undefined,
       order: "id desc",
       time: [],
-      dept_id: "",
       mobile: "",
     }
   }
@@ -63,7 +61,7 @@ const mutations = {
 
 const actions = {
   // 获取列表
-  async getAuthRoleList({commit, state}) {
+  async getAuthRoleList({commit, state}, deptId) {
     commit("SET_LISTLOADING", true);
     const data = {
       page: state.listQuery.page,
@@ -72,7 +70,7 @@ const actions = {
       order: state.listQuery.order,
       start_time: state.listQuery.time.length > 0 ? new Date(state.listQuery.time[0]).getTime() : "",
       end_time: state.listQuery.time.length > 0 ?  new Date(state.listQuery.time[1]).getTime() : "",
-      dept_id: state.listQuery.dept_id,
+      dept_id: deptId,
       mobile: state.listQuery.mobile,
     }
     await getAuthRoleList(data).then(response => {

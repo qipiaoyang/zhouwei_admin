@@ -26,9 +26,22 @@ export const constantRoutes = [
       path: 'home',
       name: 'Home',
       component: () => import('@/views/home/index'),
-      meta: { title: '订单', icon: 'dashboard' }
+      meta: { title: '新增订单', icon: 'dashboard' }
     }]
   },
+  {
+    path: '/order',
+    component: Layout,
+    redirect: '/order/order',
+    children: [{
+      path: 'order',
+      name: 'order',
+      component: () => import('@/views/order/index'),
+      meta: { title: '订单列表', icon: 'dashboard' }
+    }]
+  },
+
+
 ]
 
 export const asyncRoutes = [{

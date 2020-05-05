@@ -6,11 +6,6 @@
           <el-input v-model="listQuery.name" placeholder="请输入用户名" style="width: 200px;" class="filter-item"
                     @keyup.enter.native="handleFilter"/>
         </el-form-item>
-        <el-form-item label="小组">
-          <el-select v-model="listQuery.dept_id" placeholder="请选择小组" clearable style="width: 300px">
-            <el-option v-for="(item,index) in deptList" :key="index" :label="item.name" :value="item.id"/>
-          </el-select>
-        </el-form-item>
         <el-form-item label="用户手机号" class="filter-item">
           <el-input v-model="listQuery.mobile" placeholder="请输入用户手机号" style="width: 200px;" class="filter-item"
                     @keyup.enter.native="handleFilter"/>
@@ -69,20 +64,9 @@
           <span>{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="小组名称"  align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.dept_name }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="用户手机号"  align="center">
         <template slot-scope="{row}">
           <span>{{ row.mobile }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="用户地址"  align="center">
-        <template slot-scope="{row}">
-          <span v-if="row.province_num != row.city_num">{{ row.province }}{{ row.city }}{{ row.county}}{{row.town}}{{row.addr}}</span>
-          <span v-else>{{ row.province }}{{ row.county}}{{row.addr}}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" align="center">
@@ -127,7 +111,7 @@
 
 
   export default {
-    name: 'auth_role_list',
+    name: 'order_list',
 
     components: {
       Pagination,
@@ -167,49 +151,49 @@
       }
     },
     created() {
-      this.$store.dispatch("auth_role/getAuthRoleList");
+      this.$store.dispatch("order/getAuthRoleList", this.deptId);
       this.$store.dispatch("area/getDeptList");
     },
     computed: {
       ...mapState({
-        token: state => state.auth_role.token,
-        roleList: state => state.auth_role.roleList,
-        listQuery: state => state.auth_role.listQuery,
-        total: state => state.auth_role.total,
-        listLoading: state => state.auth_role.listLoading,
-        deptList: state => state.area.deptList
+        token: state => state.order.token,
+        roleList: state => state.order.roleList,
+        listQuery: state => state.order.listQuery,
+        total: state => state.order.total,
+        listLoading: state => state.order.listLoading,
+        deptId: state => state.app.dept_id,
       })
     },
     methods: {
       // 重置功能
       resetList() {
-        this.$store.commit("auth_role/RESET_LISTQUERY")
-        this.$store.dispatch("auth_role/getAuthRoleList");
+        this.$store.commit("order/RESET_LISTQUERY")
+        this.$store.dispatch("order/getAuthRoleList", this.deptId);
       },
       // 获取列表
       getList() {
-        this.$store.dispatch("auth_role/getAuthRoleList");
+        this.$store.dispatch("order/getAuthRoleList", this.deptId);
       },
       // 创建订单
       handleCreate() {
-        this.$store.commit("auth_role/SET_ADDVISIBLE", true);
+        this.$store.commit("order/SET_ADDVISIBLE", true);
       },
       //编辑订单
       handleUpdate(row) {
-        this.$store.dispatch("auth_role/getAuthRoleInfo", row.id);
+        this.$store.dispatch("order/getAuthRoleInfo", row.id);
       },
       // 启用禁用
       handleVisible(row, status) {
         var that = this;
-        this.$store.commit("auth_role/SET_ID", row.id);
-        this.$store.dispatch("auth_role/changeVisibleAuthRole", {status: status}).then((e) => {
+        this.$store.commit("order/SET_ID", row.id);
+        this.$store.dispatch("order/changeVisibleAuthRole", {status: status}).then((e) => {
           if(e.success) {
             that.$notify({
               title: row.status ? '禁用成功' : "启用成功",
               type: 'success',
               duration: 2000
             });
-            that.$store.dispatch("auth_role/getAuthRoleList");
+            that.$store.dispatch("order/getAuthRoleList", this.deptId);
           } else {
             that.$notify({
               title: row.staus ? '禁用失败' : "启用失败",
@@ -222,8 +206,8 @@
       // 过滤
       handleFilter() {
         this.listQuery.page = 1;
-        this.$store.commit("auth_role/SET_LISTQUERY", this.listQuery)
-        this.$store.dispatch("auth_role/getAuthRoleList");
+        this.$store.commit("order/SET_LISTQUERY", this.listQuery)
+        this.$store.dispatch("order/getAuthRoleList", this.deptId);
       },
       sortChange(data) {
         const {prop, order} = data
@@ -235,8 +219,8 @@
           } else {
             this.listQuery.order = null;
           }
-          this.$store.commit("auth_role/SET_LISTQUERY", this.listQuery)
-          this.$store.dispatch("auth_role/getAuthRoleList");
+          this.$store.commit("order/SET_LISTQUERY", this.listQuery)
+          this.$store.dispatch("order/getAuthRoleList", this.deptId);
         }
       },
       getSortClass: function (key) {
