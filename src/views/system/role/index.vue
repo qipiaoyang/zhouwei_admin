@@ -70,6 +70,11 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="员工ID" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.admin_id }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="用户名" align="center">
         <template slot-scope="{row}">
           <span>{{ row.name }}</span>
@@ -93,7 +98,7 @@
       </el-table-column>
       <el-table-column label="创建时间" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.create_time }}</span>
+          <span>{{ row.create_time | timeStampToYMRHMS }}</span>
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center">
@@ -226,11 +231,15 @@
       },
       // 创建订单
       handleCreate() {
+        this.$store.dispatch("area/getAreaTree", 0);
         this.$store.commit("auth_role/SET_ADDVISIBLE", true);
+        this.$store.dispatch("user/getAllUserList");
       },
       //编辑订单
       handleUpdate(row) {
+        this.$store.dispatch("area/getAreaTree", 0);
         this.$store.dispatch("auth_role/getAuthRoleInfo", row.id);
+        this.$store.dispatch("user/getAllUserList");
       },
       // 启用禁用
       handleVisible(row, status) {

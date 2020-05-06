@@ -71,7 +71,7 @@
       </el-table-column>
       <el-table-column label="创建时间" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.create_time }}</span>
+          <span>{{ row.create_time | timeStampToYMRHMS }}</span>
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center">

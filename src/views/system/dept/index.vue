@@ -56,7 +56,7 @@
       </el-table-column>
       <el-table-column label="创建时间" class-name="status-col" >
         <template slot-scope="{row}">
-          <span>{{ row.update_time }}</span>
+          <span>{{ row.update_time | timeStampToYMRHMS }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">

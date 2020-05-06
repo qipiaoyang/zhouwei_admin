@@ -1,5 +1,5 @@
 import {getAuthRoleList, createAuthRole, getAuthRoleInfo, updateAuthRole } from "@/api/auth_role.js";
-
+import { getTownList } from "@/api/area.js";
 const state = {
 
   editVisible: false, // 编辑弹窗状态
@@ -21,6 +21,7 @@ const state = {
     role_desc: "",
   }, // 用户信息
   listLoading: false,
+  townList: []
 }
 
 const mutations = {
@@ -47,6 +48,9 @@ const mutations = {
   },
   SET_ID: (state, id) => {
     state.id = id;
+  },
+  SET_TOWNLIST: (state, townList) => {
+    state.townList = townList;
   },
   RESET_LISTQUERY: (state, listQuery) => {
     state.listQuery = {
@@ -84,17 +88,33 @@ const actions = {
     })
   },
   // 获取用户信息
-  async getAuthRoleInfo({commit, state}, id) {
+  async getAuthRoleInfo({commit, state, dispatch}, id) {
     commit("SET_LISTLOADING", true);
     await getAuthRoleInfo(id).then(response => {
       if (response.errno === 0) {
         commit("SET_DATAINFO", {
-          role_name: response.data.role_name,
-          role_desc: response.data.role_desc,
+          ids: response.data.admin_id + "," +response.data.dept_id,
+          address: [response.data.province, response.data.city, response.data.county],
+          town: response.data.town,
+          address_desc: response.data.addr,
+          name: response.data.name,
+          mobile: response.data.mobile,
         });
+        dispatch("getTownList", { pid: response.data.county })
         commit("SET_ID", response.data.id);
         commit("SET_EDITVISIBLE", true);
         commit("SET_LISTLOADING", false);
+      }
+    })
+  },
+  // 获取乡镇列表
+  async getTownList({commit, state}, {pid}) {
+    await getTownList({
+      type: 4,
+      pid: pid
+    }).then(response => {
+      if (response.errno === 0) {
+        commit("SET_TOWNLIST", response.data);
       }
     })
   },
