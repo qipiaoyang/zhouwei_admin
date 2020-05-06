@@ -27,28 +27,34 @@
             align="right">
           </el-date-picker>
         </el-form-item>
-        <el-form-item  class="filter-item">
+        <el-form-item class="filter-item">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
             搜索
           </el-button>
         </el-form-item>
-        <el-form-item  class="filter-item">
+        <el-form-item class="filter-item">
           <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit"
                      @click="handleCreate">
             添加订单
           </el-button>
         </el-form-item>
-        <el-form-item  class="filter-item">
+        <el-form-item class="filter-item">
           <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh"
                      @click="resetList">
             重置
           </el-button>
         </el-form-item>
-
+        <el-form-item class="filter-item">
+          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh"
+                     @click="exportExcel">
+            导出Excel
+          </el-button>
+        </el-form-item>
       </el-form>
     </div>
 
     <el-table
+      class="table"
       :key="tableKey"
       v-loading="listLoading"
       :data="roleList"
@@ -64,22 +70,22 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="用户名"  align="center">
+      <el-table-column label="用户名" align="center">
         <template slot-scope="{row}">
           <span>{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="小组名称"  align="center">
+      <el-table-column label="小组名称" align="center">
         <template slot-scope="{row}">
           <span>{{ row.dept_name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="用户手机号"  align="center">
+      <el-table-column label="用户手机号" align="center">
         <template slot-scope="{row}">
           <span>{{ row.mobile }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="用户地址"  align="center">
+      <el-table-column label="用户地址" align="center">
         <template slot-scope="{row}">
           <span v-if="row.province_num != row.city_num">{{ row.province }}{{ row.city }}{{ row.county}}{{row.town}}{{row.addr}}</span>
           <span v-else>{{ row.province }}{{ row.county}}{{row.addr}}</span>
@@ -119,7 +125,10 @@
 </template>
 
 <script>
-  import { mapState } from "vuex";
+  import {mapState} from "vuex";
+  import FileSaver from "file-saver";
+  import XLSX from "xlsx";
+
 
   import Pagination from '@/components/Pagination';
   import EditComponent from './edit/index.vue';
@@ -164,6 +173,8 @@
             }
           }]
         },
+        autoWidth: true,
+        bookType: 'xlsx'
       }
     },
     created() {
@@ -181,6 +192,29 @@
       })
     },
     methods: {
+      //导出excel
+      exportExcel() {
+
+        const time  = new Date();
+        const name = `${time.getFullYear()}-${time.getMonth() + 1}-${time.getDate()}`;
+        var wb = XLSX.utils.table_to_book(document.querySelector(".table"));
+        /* get binary string as output */
+        var wbout = XLSX.write(wb, {
+          bookType: "xlsx",
+          bookSST: true,
+          type: "array"
+        });
+        try {
+          //  name+'.xlsx'表示导出的excel表格名字
+          FileSaver.saveAs(
+            new Blob([wbout], { type: "application/octet-stream" }),
+            name + ".xlsx"
+          );
+        } catch (e) {
+          if (typeof console !== "undefined") console.log(e, wbout);
+        }
+        return wbout;
+      },
       // 重置功能
       resetList() {
         this.$store.commit("auth_role/RESET_LISTQUERY")
@@ -203,7 +237,7 @@
         var that = this;
         this.$store.commit("auth_role/SET_ID", row.id);
         this.$store.dispatch("auth_role/changeVisibleAuthRole", {status: status}).then((e) => {
-          if(e.success) {
+          if (e.success) {
             that.$notify({
               title: row.status ? '禁用成功' : "启用成功",
               type: 'success',
@@ -228,9 +262,9 @@
       sortChange(data) {
         const {prop, order} = data
         if (prop === 'id') {
-          if(order === "ascending") {
+          if (order === "ascending") {
             this.listQuery.order = "asc"
-          } else if(order === "descending") {
+          } else if (order === "descending") {
             this.listQuery.order = "desc";
           } else {
             this.listQuery.order = null;
