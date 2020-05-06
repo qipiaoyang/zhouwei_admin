@@ -88,26 +88,27 @@
         this.$refs['dataForm'].validate((valid) => {
           if(valid) {
             console.log(that.formObj);
-            that.formObj.admin_id = that.formObj.ids.split(",")[0]
-            that.formObj.dept_id = that.formObj.ids.split(",")[1]
-            // this.$store.dispatch("auth_role/updateAuthRole", that.formObj).then((e) => {
-            //   if(e.success) {
-            //     that.$notify({
-            //       title: '编辑角色成功',
-            //       type: 'success',
-            //       duration: 2000
-            //     });
-            //     that.$store.commit("auth_role/RESET_LISTQUERY");
-            //     that.$store.dispatch("auth_role/getAuthRoleList");
-            //   } else {
-            //     that.$notify({
-            //       title: '编辑角色失败',
-            //       message: e.data.errmsg,
-            //       type: 'fail',
-            //       duration: 2000
-            //     });
-            //   }
-            // });
+            that.formObj.admin_id = that.formObj.ids.split(",")[0];
+            that.formObj.dept_id = that.formObj.ids.split(",")[1];
+            delete that.formObj.ids;
+            this.$store.dispatch("auth_role/updateAuthRole", that.formObj).then((e) => {
+              if(e.success) {
+                that.$notify({
+                  title: '编辑角色成功',
+                  type: 'success',
+                  duration: 2000
+                });
+                that.$store.commit("auth_role/RESET_LISTQUERY");
+                that.$store.dispatch("auth_role/getAuthRoleList");
+              } else {
+                that.$notify({
+                  title: '编辑角色失败',
+                  message: e.data.errmsg,
+                  type: 'fail',
+                  duration: 2000
+                });
+              }
+            });
           }
         })
       }

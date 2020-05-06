@@ -28,12 +28,6 @@
           </el-button>
         </el-form-item>
         <el-form-item  class="filter-item">
-          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit"
-                     @click="handleCreate">
-            添加订单
-          </el-button>
-        </el-form-item>
-        <el-form-item  class="filter-item">
           <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh"
                      @click="resetList">
             重置
@@ -81,9 +75,6 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            编辑
-          </el-button>
           <el-button type="success" size="mini" @click="handleVisible(row, 2)">
             签收
           </el-button>
