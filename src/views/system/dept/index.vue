@@ -12,12 +12,6 @@
           </el-button>
         </el-form-item>
         <el-form-item  class="filter-item">
-          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit"
-                     @click="handleCreate">
-            添加小组
-          </el-button>
-        </el-form-item>
-        <el-form-item  class="filter-item">
           <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh"
                      @click="resetList">
             重置
@@ -57,16 +51,6 @@
       <el-table-column label="创建时间" class-name="status-col" >
         <template slot-scope="{row}">
           <span>{{ row.update_time | timeStampToYMRHMS }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
-        <template slot-scope="{row,$index}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            编辑
-          </el-button>
-          <el-button :type="row.status ? 'danger' : 'success'" size="mini" @click="handleVisible(row)">
-            {{ row.status ? "禁用" : "启用" }}
-          </el-button>
         </template>
       </el-table-column>
     </el-table>

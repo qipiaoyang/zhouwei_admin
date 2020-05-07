@@ -96,6 +96,11 @@
           <span v-else>{{ row.province }}{{ row.county}}{{row.addr}}</span>
         </template>
       </el-table-column>
+      <el-table-column label="备注"  align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.mark }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="创建时间" align="center">
         <template slot-scope="{row}">
           <span>{{ row.create_time | timeStampToYMRHMS }}</span>
@@ -106,16 +111,22 @@
           <span>{{ row.status | payStatus }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="400" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
           </el-button>
-          <el-button type="success" size="mini" @click="handleVisible(row, 2)">
+          <el-button type="info" size="mini" @click="handleVisible(row, 2)">
             签收
           </el-button>
-          <el-button type="danger" size="mini" @click="handleVisible(row, 3)">
+          <el-button type="warning" size="mini" @click="handleVisible(row, 3)">
             退回
+          </el-button>
+          <el-button type="danger" size="mini" @click="handleVisible(row, 4)">
+            异常
+          </el-button>
+          <el-button type="success" size="mini" @click="handleVisible(row, 5)">
+            激活
           </el-button>
         </template>
       </el-table-column>

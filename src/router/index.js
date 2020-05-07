@@ -17,18 +17,21 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
+]
 
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/home',
-    children: [{
-      path: 'home',
-      name: 'Home',
-      component: () => import('@/views/home/index'),
-      meta: { title: '新增订单', icon: 'dashboard' }
-    }]
-  },
+export const frontRoutes = [{
+  path: '/',
+  component: Layout,
+  redirect: '/home',
+  children: [{
+    path: 'home',
+    name: 'Home',
+    component: () => import('@/views/home/index'),
+    meta: { title: '新增订单', icon: 'dashboard' }
+  }]
+}]
+
+export const endRoutes = [
   {
     path: '/order',
     component: Layout,
@@ -39,9 +42,7 @@ export const constantRoutes = [
       component: () => import('@/views/order/index'),
       meta: { title: '订单列表', icon: 'dashboard' }
     }]
-  },
-
-
+  }
 ]
 
 export const asyncRoutes = [{

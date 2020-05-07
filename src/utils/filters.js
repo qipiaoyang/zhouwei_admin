@@ -15,11 +15,12 @@ module.exports = {
   },
   payStatus: function(e) {
     const data = {
-      "1": "已激活",
+      "1": "已发货",
       "2": "已签收",
       "3": "已退回",
       "4": "异常",
       "5": "其他",
+      "6": "已激活"
     };
     return data[e]
   },

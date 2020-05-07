@@ -31,6 +31,9 @@
       <el-form-item label="手机号码" prop="mobile">
         <el-input v-model="formObj.mobile" placeholder="请输入手机号码" style="width: 400px;"/>
       </el-form-item>
+      <el-form-item label="备注" prop="desc">
+        <el-input v-model="formObj.desc" placeholder="请输入备注" style="width: 400px;"/>
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button>取消</el-button>
@@ -74,6 +77,7 @@ export default {
         mobile: "",
         name: "",
         town: "",
+        desc: ""
       },
       props: {
         value: 'id',
@@ -107,6 +111,7 @@ export default {
                   mobile: "",
                   name: "",
                   town: "",
+                  desc: ""
                 };
               } else {
                 that.$notify({

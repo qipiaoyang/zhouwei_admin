@@ -68,7 +68,7 @@ const actions = {
         const { data } = response
         commit('SET_TOKEN', data.token)
         setToken(data.token)
-        resolve()
+        resolve(data.data);
       }).catch(error => {
         reject(error)
       })
@@ -104,6 +104,8 @@ const actions = {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
         commit('SET_TOKEN', '')
+        commit('SET_ADMIN_ID', '')
+        commit('SET_DEPT_ID', '')
         removeToken()
         resetRouter()
         resolve()

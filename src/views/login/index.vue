@@ -49,6 +49,7 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
+import { mapGetters } from "vuex";
 
 export default {
   name: 'Login',
@@ -81,6 +82,11 @@ export default {
       redirect: undefined
     }
   },
+  computed: {
+    ...mapGetters([
+      'dept_id'
+    ])
+  },
   watch: {
     $route: {
       handler: function(route) {
@@ -101,11 +107,20 @@ export default {
       })
     },
     handleLogin() {
+      var that = this;
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true;
-          this.$store.dispatch('app/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
+          this.$store.dispatch('app/login', this.loginForm).then((res) => {
+            if(res.dept_id == 1) {
+              this.$router.push({ path: '/system/role' })
+            } else if(res.dept_id == 2) {
+              this.$router.push({ path: '/home' })
+            } else if(res.dept_id == 3) {
+              this.$router.push({ path: '/order/order' })
+            } else {
+              this.$router.push({ path: this.redirect || '/' })
+            }
             this.loading = false;
           }).catch(() => {
             this.loading = false;
