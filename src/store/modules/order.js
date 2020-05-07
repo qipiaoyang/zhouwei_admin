@@ -14,6 +14,7 @@ const state = {
     order: "id desc",
     time: [],
     mobile: "",
+    admin_id: ""
   },
   datainfo: {
     role_name: "",
@@ -55,13 +56,14 @@ const mutations = {
       order: "id desc",
       time: [],
       mobile: "",
+      admin_id: ""
     }
   }
 }
 
 const actions = {
   // 获取列表
-  async getOrderList({commit, state}, deptId) {
+  async getOrderList({commit, state}, adminId) {
     commit("SET_LISTLOADING", true);
     const data = {
       page: state.listQuery.page,
@@ -70,7 +72,7 @@ const actions = {
       order: state.listQuery.order,
       start_time: state.listQuery.time.length > 0 ? new Date(state.listQuery.time[0]).getTime() : "",
       end_time: state.listQuery.time.length > 0 ?  new Date(state.listQuery.time[1]).getTime() : "",
-      dept_id: deptId,
+      admin_id: adminId,
       mobile: state.listQuery.mobile,
     }
     await getOrderList(data).then(response => {
