@@ -13,6 +13,13 @@ module.exports = {
     };
     return data[e]
   },
+  allotStatus: function(e) {
+    const data = {
+      "0": "未分配",
+      "1": "已分配"
+    };
+    return data[e]
+  },
   payStatus: function(e) {
     const data = {
       "1": "已发货",

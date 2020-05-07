@@ -4,6 +4,7 @@ const state = {
 
   editVisible: false, // 编辑弹窗状态
   addVisible: false, // 编辑弹窗状态
+  allotVisible: false, // 分配弹窗状态
   roleList: [], // 用户列表
   total: 0,
   id: "",
@@ -21,10 +22,17 @@ const state = {
     role_desc: "",
   }, // 用户信息
   listLoading: false,
-  townList: []
+  townList: [],
+  multipleSelection: [], //选中的前端订单
 }
 
 const mutations = {
+  SET_MULTIPLESELECTION: (state, multipleSelection) => {
+    state.multipleSelection = multipleSelection;
+  },
+  SET_ALLOTVISIBLE: (state, allotVisible) => {
+    state.allotVisible = allotVisible;
+  },
   SET_EDITVISIBLE: (state, editVisible) => {
     state.editVisible = editVisible;
   },

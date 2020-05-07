@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="新增角色" :visible.sync="addVisible" :before-close="cancelDialog">
+  <el-dialog title="新增前端订单" :visible.sync="addVisible" :before-close="cancelDialog">
     <el-form ref="dataForm" :rules="rules" :model="formObj" label-position="left" label-width="100px"
              style="width: 400px; margin-left:50px;">
       <el-form-item label="员工id">

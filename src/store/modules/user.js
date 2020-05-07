@@ -78,6 +78,16 @@ const actions = {
       }
     })
   },
+  // 获取后端
+  async getendUserList({commit, state}) {
+    commit("SET_LISTLOADING", true);
+    await getUserList({dept_id: 3}).then(response => {
+      if (response.errno === 0) {
+        commit("SET_USERLIST", response.data);
+        commit("SET_LISTLOADING", false);
+      }
+    })
+  },
   // 获取用户信息
   async getUserInfo({commit, state}, id) {
     commit("SET_LISTLOADING", true);

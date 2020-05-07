@@ -65,7 +65,7 @@
                   role_desc: "",
                 };
                 that.$store.commit("order/RESET_LISTQUERY");
-                that.$store.dispatch("order/getAuthRoleList");
+                that.$store.dispatch("order/getOrderList");
               } else {
                 that.$notify({
                   title: '添加用户失败',

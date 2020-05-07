@@ -1,4 +1,4 @@
-import {getAuthRoleList, createAuthRole, getAuthRoleInfo, updateAuthRole } from "@/api/auth_role.js";
+import {getOrderList, createOrder, getOrderInfo, updateOrder } from "@/api/order.js";
 
 const state = {
 
@@ -61,7 +61,7 @@ const mutations = {
 
 const actions = {
   // 获取列表
-  async getAuthRoleList({commit, state}, deptId) {
+  async getOrderList({commit, state}, deptId) {
     commit("SET_LISTLOADING", true);
     const data = {
       page: state.listQuery.page,
@@ -73,7 +73,7 @@ const actions = {
       dept_id: deptId,
       mobile: state.listQuery.mobile,
     }
-    await getAuthRoleList(data).then(response => {
+    await getOrderList(data).then(response => {
       if (response.errno === 0) {
         commit("SET_ROLELIST", response.data.data);
         commit("SET_TOTAL", response.data.count);
@@ -82,9 +82,9 @@ const actions = {
     })
   },
   // 获取用户信息
-  async getAuthRoleInfo({commit, state}, id) {
+  async getOrderInfo({commit, state}, id) {
     commit("SET_LISTLOADING", true);
-    await getAuthRoleInfo(id).then(response => {
+    await getOrderInfo(id).then(response => {
       if (response.errno === 0) {
         commit("SET_DATAINFO", {
           role_name: response.data.role_name,
@@ -97,9 +97,9 @@ const actions = {
     })
   },
   // 新建用户
-  async createAuthRole({commit, dispatch}, data) {
+  async createOrder({commit, dispatch}, data) {
     var that = this;
-    const result = await createAuthRole(data).then((e) => {
+    const result = await createOrder(data).then((e) => {
       if (e.errno === 0) {
         commit("SET_ADDVISIBLE", false);
 
@@ -111,9 +111,9 @@ const actions = {
     return result;
   },
   // 编辑用户
-  async updateAuthRole({commit, dispatch, state}, data) {
+  async updateOrder({commit, dispatch, state}, data) {
     var that = this;
-    const result = await updateAuthRole({ id: state.id, data: data }).then((e) => {
+    const result = await updateOrder({ id: state.id, data: data }).then((e) => {
       if (e.errno === 0) {
         commit("SET_EDITVISIBLE", false);
         commit("SET_ID", "");
@@ -131,8 +131,8 @@ const actions = {
     return result;
   },
   // 启用禁用状态
-  async changeVisibleAuthRole({ commit, dispatch, state }, data) {
-    const result = await dispatch("updateAuthRole", data);
+  async changeVisibleOrder({ commit, dispatch, state }, data) {
+    const result = await dispatch("updateOrder", data);
     return result;
   }
 }

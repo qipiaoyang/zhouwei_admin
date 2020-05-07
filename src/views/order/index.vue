@@ -153,7 +153,7 @@
       }
     },
     created() {
-      this.$store.dispatch("order/getAuthRoleList", this.deptId);
+      this.$store.dispatch("order/getOrderList", this.deptId);
       this.$store.dispatch("area/getDeptList");
     },
     computed: {
@@ -170,11 +170,11 @@
       // 重置功能
       resetList() {
         this.$store.commit("order/RESET_LISTQUERY")
-        this.$store.dispatch("order/getAuthRoleList", this.deptId);
+        this.$store.dispatch("order/getOrderList", this.deptId);
       },
       // 获取列表
       getList() {
-        this.$store.dispatch("order/getAuthRoleList", this.deptId);
+        this.$store.dispatch("order/getOrderList", this.deptId);
       },
       // 创建订单
       handleCreate() {
@@ -195,7 +195,7 @@
               type: 'success',
               duration: 2000
             });
-            that.$store.dispatch("order/getAuthRoleList", this.deptId);
+            that.$store.dispatch("order/getOrderList", this.deptId);
           } else {
             that.$notify({
               title: row.staus ? '禁用失败' : "启用失败",
@@ -209,7 +209,7 @@
       handleFilter() {
         this.listQuery.page = 1;
         this.$store.commit("order/SET_LISTQUERY", this.listQuery)
-        this.$store.dispatch("order/getAuthRoleList", this.deptId);
+        this.$store.dispatch("order/getOrderList", this.deptId);
       },
       sortChange(data) {
         const {prop, order} = data
@@ -222,7 +222,7 @@
             this.listQuery.order = null;
           }
           this.$store.commit("order/SET_LISTQUERY", this.listQuery)
-          this.$store.dispatch("order/getAuthRoleList", this.deptId);
+          this.$store.dispatch("order/getOrderList", this.deptId);
         }
       },
       getSortClass: function (key) {

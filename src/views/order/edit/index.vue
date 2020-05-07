@@ -57,7 +57,7 @@
                   duration: 2000
                 });
                 that.$store.commit("order/RESET_LISTQUERY");
-                that.$store.dispatch("order/getAuthRoleList");
+                that.$store.dispatch("order/getOrderList");
               } else {
                 that.$notify({
                   title: '编辑角色失败',

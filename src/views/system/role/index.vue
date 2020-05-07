@@ -39,6 +39,12 @@
           </el-button>
         </el-form-item>
         <el-form-item class="filter-item">
+          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit"
+                     @click="handleAllot">
+            批量分配
+          </el-button>
+        </el-form-item>
+        <el-form-item class="filter-item">
           <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh"
                      @click="resetList">
             重置
@@ -57,13 +63,19 @@
       class="table"
       :key="tableKey"
       v-loading="listLoading"
+      ref="multipleTable"
       :data="roleList"
+      @selection-change="handleSelectionChange"
       border
       fit
       highlight-current-row
       style="width: 100%;"
       @sort-change="sortChange"
     >
+      <el-table-column
+        type="selection"
+        width="40">
+      </el-table-column>
       <el-table-column label="ID" prop="id" sortable="custom" align="center"
                        :class-name="getSortClass('id')">
         <template slot-scope="{row}">
@@ -108,7 +120,7 @@
       </el-table-column>
       <el-table-column label="状态" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.status | payStatus }}</span>
+          <span>{{ row.status | allotStatus }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="400" class-name="small-padding fixed-width">
@@ -136,6 +148,7 @@
                 @pagination="getList"/>
     <EditComponent></EditComponent>
     <AddComponent></AddComponent>
+    <AllotComponent></AllotComponent>
 
   </div>
 </template>
@@ -149,6 +162,7 @@
   import Pagination from '@/components/Pagination';
   import EditComponent from './edit/index.vue';
   import AddComponent from './add/index.vue';
+  import AllotComponent from './allot/index.vue';
 
 
   export default {
@@ -157,7 +171,8 @@
     components: {
       Pagination,
       EditComponent,
-      AddComponent
+      AddComponent,
+      AllotComponent
     },
     data() {
       return {
@@ -190,7 +205,7 @@
           }]
         },
         autoWidth: true,
-        bookType: 'xlsx'
+        bookType: 'xlsx',
       }
     },
     created() {
@@ -200,14 +215,23 @@
     computed: {
       ...mapState({
         token: state => state.auth_role.token,
+        multipleSelection: state => state.auth_role.multipleSelection,
         roleList: state => state.auth_role.roleList,
         listQuery: state => state.auth_role.listQuery,
         total: state => state.auth_role.total,
         listLoading: state => state.auth_role.listLoading,
-        deptList: state => state.area.deptList
+        deptList: state => state.area.deptList,
       })
     },
     methods: {
+      // 批量分配
+      handleAllot() {
+        this.$store.commit("auth_role/SET_ALLOTVISIBLE", true);
+        this.$store.dispatch("user/getendUserList");
+      },
+      handleSelectionChange(val) {
+        this.$store.commit("auth_role/SET_MULTIPLESELECTION", val);
+      },
       //导出excel
       exportExcel() {
 
