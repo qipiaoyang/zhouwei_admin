@@ -55,6 +55,7 @@
                      @click="exportExcel">
             导出Excel
           </el-button>
+          <upload-excel-component :on-success="handleSuccess" />
         </el-form-item>
       </el-form>
     </div>
@@ -155,6 +156,7 @@
     <AddComponent></AddComponent>
     <AllotComponent></AllotComponent>
 
+
   </div>
 </template>
 
@@ -165,6 +167,7 @@
 
 
   import Pagination from '@/components/Pagination';
+  import UploadExcelComponent from '@/components/UploadExcel';
   import EditComponent from './edit/index.vue';
   import AddComponent from './add/index.vue';
   import AllotComponent from './allot/index.vue';
@@ -177,7 +180,8 @@
       Pagination,
       EditComponent,
       AddComponent,
-      AllotComponent
+      AllotComponent,
+      UploadExcelComponent
     },
     data() {
       return {
@@ -229,6 +233,10 @@
       })
     },
     methods: {
+      // 导入excel
+      handleSuccess({ results, header }) {
+        console.log(results, header)
+      },
       // 批量分配
       handleAllot() {
         this.$store.commit("auth_role/SET_ALLOTVISIBLE", true);
