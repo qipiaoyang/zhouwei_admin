@@ -108,6 +108,11 @@
           <span v-else>{{ row.province }}{{ row.county}}{{row.addr}}</span>
         </template>
       </el-table-column>
+      <el-table-column label="快递单号"  align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.courier_num }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="备注"  align="center">
         <template slot-scope="{row}">
           <span>{{ row.mark }}</span>
