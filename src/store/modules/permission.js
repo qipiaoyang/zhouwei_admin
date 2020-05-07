@@ -51,7 +51,7 @@ const actions = {
     return new Promise(resolve => {
       let accessedRoutes;
       if(dept_id == 1) {
-        accessedRoutes = frontRoutes.concat(asyncRoutes);
+        accessedRoutes = frontRoutes.concat(endRoutes,asyncRoutes);
       } else if(dept_id == 2) {
         accessedRoutes = frontRoutes;
       } else if(dept_id == 3) {
