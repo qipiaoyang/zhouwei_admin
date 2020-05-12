@@ -10,7 +10,7 @@
           <el-input v-model="listQuery.mobile" placeholder="请输入用户手机号" style="width: 200px;" class="filter-item"
                     @keyup.enter.native="handleFilter"/>
         </el-form-item>
-        <el-form-item label="后端人员" class="filter-item">
+        <el-form-item label="后端人员" class="filter-item" v-if="dept_id == 1">
           <el-select v-model="listQuery.adminId" placeholder="请选择后端人员" clearable style="width: 200px">
             <el-option v-for="(item,index) in userList" :key="index" :label="item.username" :value="item.id"/>
           </el-select>
@@ -215,7 +215,8 @@
         listLoading: state => state.order.listLoading,
         adminId: state => state.app.admin_id,
         userList: state => state.user.userList,
-      })
+        dept_id: state => state.app.dept_id,
+      }),
     },
     methods: {
       // 重置功能
