@@ -14,7 +14,9 @@ const state = {
     order: "id desc",
     time: [],
     mobile: "",
-    admin_id: ""
+    admin_id: "",
+    adminId: "",
+    status: ""
   },
   datainfo: {
     role_name: "",
@@ -56,7 +58,9 @@ const mutations = {
       order: "id desc",
       time: [],
       mobile: "",
-      admin_id: ""
+      admin_id: "",
+      adminId: "",
+      status: ""
     }
   }
 }
@@ -74,6 +78,8 @@ const actions = {
       end_time: state.listQuery.time.length > 0 ?  new Date(state.listQuery.time[1]).getTime() : "",
       admin_id: adminId,
       mobile: state.listQuery.mobile,
+      adminId: state.listQuery.adminId,
+      status: state.listQuery.status
     }
     await getOrderList(data).then(response => {
       if (response.errno === 0) {

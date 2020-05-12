@@ -11,9 +11,19 @@
             <el-option v-for="(item,index) in deptList" :key="index" :label="item.name" :value="item.id"/>
           </el-select>
         </el-form-item>
+        <el-form-item label="前端人员">
+          <el-select v-model="listQuery.admin_id" placeholder="请选择前端人员" clearable style="width: 300px">
+            <el-option v-for="(item,index) in userList" :key="index" :label="item.username" :value="item.id"/>
+          </el-select>
+        </el-form-item>
         <el-form-item label="用户手机号" class="filter-item">
           <el-input v-model="listQuery.mobile" placeholder="请输入用户手机号" style="width: 200px;" class="filter-item"
                     @keyup.enter.native="handleFilter"/>
+        </el-form-item>
+        <el-form-item label="是否分配">
+          <el-select v-model="listQuery.status" placeholder="请选择分配状态" clearable style="width: 300px">
+            <el-option v-for="(item,index) in allotStatus" :key="index" :label="item.label" :value="item.value"/>
+          </el-select>
         </el-form-item>
         <el-form-item label="开始结束时间" class="filter-item">
           <el-date-picker
@@ -55,7 +65,12 @@
                      @click="exportExcel">
             导出Excel
           </el-button>
-          <upload-excel-component :on-success="handleSuccess" />
+        </el-form-item>
+        <el-form-item class="filter-item">
+          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit"
+                     @click="handleImport">
+            导入快递码
+          </el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -129,22 +144,10 @@
           <span>{{ row.status | allotStatus }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="400" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
-          </el-button>
-          <el-button type="info" size="mini" @click="handleVisible(row, 2)">
-            签收
-          </el-button>
-          <el-button type="warning" size="mini" @click="handleVisible(row, 3)">
-            退回
-          </el-button>
-          <el-button type="danger" size="mini" @click="handleVisible(row, 4)">
-            异常
-          </el-button>
-          <el-button type="success" size="mini" @click="handleVisible(row, 5)">
-            激活
           </el-button>
         </template>
       </el-table-column>
@@ -155,6 +158,7 @@
     <EditComponent></EditComponent>
     <AddComponent></AddComponent>
     <AllotComponent></AllotComponent>
+    <ImportComponent></ImportComponent>
 
 
   </div>
@@ -167,10 +171,10 @@
 
 
   import Pagination from '@/components/Pagination';
-  import UploadExcelComponent from '@/components/UploadExcel';
   import EditComponent from './edit/index.vue';
   import AddComponent from './add/index.vue';
   import AllotComponent from './allot/index.vue';
+  import ImportComponent from './import/index.vue';
 
 
   export default {
@@ -181,7 +185,7 @@
       EditComponent,
       AddComponent,
       AllotComponent,
-      UploadExcelComponent
+      ImportComponent
     },
     data() {
       return {
@@ -215,11 +219,26 @@
         },
         autoWidth: true,
         bookType: 'xlsx',
+        allotStatus: [
+          {
+            label: "已分配",
+            value: 1
+          },
+          {
+            label: "未分配",
+            value: 0
+          },
+          {
+            label: "全部",
+            value: ""
+          }
+        ]
       }
     },
     created() {
       this.$store.dispatch("auth_role/getAuthRoleList");
       this.$store.dispatch("area/getDeptList");
+      this.$store.dispatch("user/getfrontUserList");
     },
     computed: {
       ...mapState({
@@ -230,12 +249,12 @@
         total: state => state.auth_role.total,
         listLoading: state => state.auth_role.listLoading,
         deptList: state => state.area.deptList,
+        userList: state => state.user.userList
       })
     },
     methods: {
-      // 导入excel
-      handleSuccess({ results, header }) {
-        console.log(results, header)
+      handleImport() {
+        this.$store.commit("auth_role/SET_IMPORTVISIBLE", true);
       },
       // 批量分配
       handleAllot() {
@@ -288,27 +307,6 @@
         this.$store.dispatch("area/getAreaTree", 0);
         this.$store.dispatch("auth_role/getAuthRoleInfo", row.id);
         this.$store.dispatch("user/getAllUserList");
-      },
-      // 启用禁用
-      handleVisible(row, status) {
-        var that = this;
-        this.$store.commit("auth_role/SET_ID", row.id);
-        this.$store.dispatch("auth_role/changeVisibleAuthRole", {status: status}).then((e) => {
-          if (e.success) {
-            that.$notify({
-              title: row.status ? '禁用成功' : "启用成功",
-              type: 'success',
-              duration: 2000
-            });
-            that.$store.dispatch("auth_role/getAuthRoleList");
-          } else {
-            that.$notify({
-              title: row.staus ? '禁用失败' : "启用失败",
-              type: 'success',
-              duration: 2000
-            });
-          }
-        });
       },
       // 过滤
       handleFilter() {

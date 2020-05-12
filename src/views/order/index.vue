@@ -10,6 +10,16 @@
           <el-input v-model="listQuery.mobile" placeholder="请输入用户手机号" style="width: 200px;" class="filter-item"
                     @keyup.enter.native="handleFilter"/>
         </el-form-item>
+        <el-form-item label="后端人员" class="filter-item">
+          <el-select v-model="listQuery.adminId" placeholder="请选择后端人员" clearable style="width: 200px">
+            <el-option v-for="(item,index) in userList" :key="index" :label="item.username" :value="item.id"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="订单状态" class="filter-item">
+          <el-select v-model="listQuery.status" placeholder="请选择后端人员" clearable style="width: 200px">
+            <el-option v-for="(item,index) in orderStatus" :key="index" :label="item.label" :value="item.value"/>
+          </el-select>
+        </el-form-item>
         <el-form-item label="开始结束时间" class="filter-item">
           <el-date-picker
             v-model="listQuery.time"
@@ -63,12 +73,22 @@
           <span>{{ row.mobile }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="员工id"  align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.admin_id }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="备注"  align="center">
         <template slot-scope="{row}">
           <span>{{ row.mark }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center">
+      <el-table-column label="快递单号"  align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.courier_num }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="创建时间" align="center" min-width="110">
         <template slot-scope="{row}">
           <span>{{ row.create_time | timeStampToYMRHMS }}</span>
         </template>
@@ -89,7 +109,7 @@
           <el-button type="danger" size="mini" @click="handleVisible(row, 4)">
             异常
           </el-button>
-          <el-button type="success" size="mini" @click="handleVisible(row, 5)">
+          <el-button type="success" size="mini" @click="handleVisible(row, 6)">
             激活
           </el-button>
         </template>
@@ -150,11 +170,41 @@
             }
           }]
         },
+        orderStatus: [
+          {
+            value: "",
+            label: "全部"
+          },
+          {
+            value: 1,
+            label: "已发货"
+          },
+          {
+            value: 2,
+            label: "已签收"
+          },
+          {
+            value: 3,
+            label: "已退回"
+          },
+          {
+            value: 4,
+            label: "异常"
+          },
+          {
+            value: 5,
+            label: "其他"
+          },{
+            value: 6,
+            label: "已激活"
+          },
+        ]
       }
     },
     created() {
       this.$store.dispatch("order/getOrderList", this.adminId);
       this.$store.dispatch("area/getDeptList");
+      this.$store.dispatch("user/getendUserList");
     },
     computed: {
       ...mapState({
@@ -164,6 +214,7 @@
         total: state => state.order.total,
         listLoading: state => state.order.listLoading,
         adminId: state => state.app.admin_id,
+        userList: state => state.user.userList,
       })
     },
     methods: {
@@ -176,19 +227,11 @@
       getList() {
         this.$store.dispatch("order/getOrderList", this.adminId);
       },
-      // 创建订单
-      handleCreate() {
-        this.$store.commit("order/SET_ADDVISIBLE", true);
-      },
-      //编辑订单
-      handleUpdate(row) {
-        this.$store.dispatch("order/getAuthRoleInfo", row.id);
-      },
       // 启用禁用
       handleVisible(row, status) {
         var that = this;
         this.$store.commit("order/SET_ID", row.id);
-        this.$store.dispatch("order/changeVisibleAuthRole", {status: status}).then((e) => {
+        this.$store.dispatch("order/changeVisibleOrder", {status: status}).then((e) => {
           if(e.success) {
             that.$notify({
               title: row.status ? '禁用成功' : "启用成功",

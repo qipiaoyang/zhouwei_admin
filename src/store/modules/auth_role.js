@@ -5,6 +5,7 @@ const state = {
   editVisible: false, // 编辑弹窗状态
   addVisible: false, // 编辑弹窗状态
   allotVisible: false, // 分配弹窗状态
+  importVisible: false, // 分配弹窗状态
   roleList: [], // 用户列表
   total: 0,
   id: "",
@@ -16,6 +17,8 @@ const state = {
     time: [],
     dept_id: "",
     mobile: "",
+    status: "",
+    admin_id: ""
   },
   datainfo: {
     role_name: "",
@@ -29,6 +32,9 @@ const state = {
 const mutations = {
   SET_MULTIPLESELECTION: (state, multipleSelection) => {
     state.multipleSelection = multipleSelection;
+  },
+  SET_IMPORTVISIBLE: (state, importVisible) => {
+    state.importVisible = importVisible;
   },
   SET_ALLOTVISIBLE: (state, allotVisible) => {
     state.allotVisible = allotVisible;
@@ -69,6 +75,8 @@ const mutations = {
       time: [],
       dept_id: "",
       mobile: "",
+      status: "",
+      admin_id: ""
     }
   }
 }
@@ -86,6 +94,8 @@ const actions = {
       end_time: state.listQuery.time.length > 0 ?  new Date(state.listQuery.time[1]).getTime() : "",
       dept_id: state.listQuery.dept_id,
       mobile: state.listQuery.mobile,
+      status: state.listQuery.status,
+      admin_id: state.listQuery.admin_id,
     }
     await getAuthRoleList(data).then(response => {
       if (response.errno === 0) {
