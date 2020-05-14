@@ -110,7 +110,7 @@
             异常
           </el-button>
           <el-button type="success" size="mini" @click="handleVisible(row, 6)">
-            激活
+            完成
           </el-button>
         </template>
       </el-table-column>
@@ -196,7 +196,7 @@
             label: "其他"
           },{
             value: 6,
-            label: "已激活"
+            label: "完成"
           },
         ]
       }
