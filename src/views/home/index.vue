@@ -68,7 +68,7 @@ export default {
           { required: true, message: "请输入地址详细信息", trigger: "blur" }
         ],
         name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
-        town: [{ required: true, message: "请输入乡镇", trigger: "blur" }],
+        // town: [{ required: true, message: "请输入乡镇", trigger: "blur" }],
         mobile: [{ required: true, message: "请输入手机号", trigger: "blur" }]
       },
       formObj: {
