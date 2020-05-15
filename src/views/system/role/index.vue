@@ -149,6 +149,9 @@
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
           </el-button>
+          <el-button type="primary" size="mini" @click="handleDelete(row)">
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -307,6 +310,28 @@
         this.$store.dispatch("area/getAreaTree", 0);
         this.$store.dispatch("auth_role/getAuthRoleInfo", row.id);
         this.$store.dispatch("user/getAllUserList");
+      },
+      //删除订单
+      handleDelete(row) {
+        var that = this;
+        this.$store.dispatch("auth_role/deleteAuthRole", { id: row.id, data: {visible: 0} }).then((e) => {
+          if(e.success) {
+            that.$notify({
+              title: '删除订单成功',
+              type: 'success',
+              duration: 2000
+            });
+            that.$store.commit("auth_role/RESET_LISTQUERY");
+            that.$store.dispatch("auth_role/getAuthRoleList");
+          } else {
+            that.$notify({
+              title: '删除订单失败',
+              message: e.data.errmsg,
+              type: 'fail',
+              duration: 2000
+            });
+          }
+        });;
       },
       // 过滤
       handleFilter() {

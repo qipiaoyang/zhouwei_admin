@@ -170,6 +170,20 @@ const actions = {
     })
     return result;
   },
+  // 删除用户
+  async deleteAuthRole({commit, dispatch, state}, { id, data}) {
+    var that = this;
+    console.log(data,"data==========")
+    const result = await updateAuthRole({ id: id, data: data}).then((e) => {
+      if (e.errno === 0) {
+        commit("SET_ID", "");
+        return {success: true};
+      } else {
+        return {success: false};
+      }
+    })
+    return result;
+  },
   // 启用禁用状态
   async changeVisibleAuthRole({ commit, dispatch, state }, data) {
     const result = await dispatch("updateAuthRole", data);
