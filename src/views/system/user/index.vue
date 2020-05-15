@@ -58,6 +58,11 @@
           <span>{{ row.mobile }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="业绩" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.num }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="小组名" align="center">
         <template slot-scope="{row}">
           <span>{{ row.dept_name }}</span>

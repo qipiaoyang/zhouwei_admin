@@ -6,7 +6,7 @@ switch (process.env.VUE_APP_ENV) {
         VUE_APP_BASE_API = 'http://121.36.47.82:81/';
         break;
     case "test":
-        VUE_APP_BASE_API = "http://121.36.47.82:81/";
+        VUE_APP_BASE_API = "http://121.36.47.82:82/";
         break;
     case "prod":
         VUE_APP_BASE_API = "https://yx-test.lemonbus.cn";
