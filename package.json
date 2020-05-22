@@ -8,6 +8,7 @@
     "dev": "cross-env VUE_APP_ENV=dev VUE_CLI_BABEL_TRANSPILE_MODULES=true  vue-cli-service serve",
     "test": "cross-env VUE_APP_ENV=test VUE_CLI_BABEL_TRANSPILE_MODULES=true  vue-cli-service serve",
     "build:prod": "cross-env VUE_APP_ENV=dev VUE_CLI_BABEL_TRANSPILE_MODULES=true vue-cli-service build",
+    "build:test": "cross-env VUE_APP_ENV=test VUE_CLI_BABEL_TRANSPILE_MODULES=true vue-cli-service build --dest testDist",
     "build:stage": "vue-cli-service build --mode staging",
     "preview": "node build/index.js --preview",
     "lint": "eslint --ext .js,.vue src",

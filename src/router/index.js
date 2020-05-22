@@ -40,7 +40,7 @@ export const endRoutes = [
       path: 'order',
       name: 'order',
       component: () => import('@/views/order/index'),
-      meta: { title: '物流订单列表', icon: 'dashboard' }
+      meta: { title: '客服订单列表', icon: 'dashboard' }
     }]
   }
 ]
@@ -60,12 +60,6 @@ export const asyncRoutes = [{
       name: 'user',
       component: () => import('@/views/system/user/index'),
       meta: { title: '用户列表' }
-    },
-    {
-      path: 'dept',
-      name: 'dept',
-      component: () => import('@/views/system/dept/index'),
-      meta: { title: '小组列表' }
     },
     {
       path: 'role',

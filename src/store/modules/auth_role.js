@@ -173,7 +173,6 @@ const actions = {
   // 删除用户
   async deleteAuthRole({commit, dispatch, state}, { id, data}) {
     var that = this;
-    console.log(data,"data==========")
     const result = await updateAuthRole({ id: id, data: data}).then((e) => {
       if (e.errno === 0) {
         commit("SET_ID", "");

@@ -6,12 +6,7 @@
           <el-input v-model="listQuery.name" placeholder="请输入用户名" style="width: 200px;" class="filter-item"
                     @keyup.enter.native="handleFilter"/>
         </el-form-item>
-        <el-form-item label="小组">
-          <el-select v-model="listQuery.dept_id" placeholder="请选择小组" clearable style="width: 300px">
-            <el-option v-for="(item,index) in deptList" :key="index" :label="item.name" :value="item.id"/>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="前端人员">
+        <el-form-item label="客服人员">
           <el-select v-model="listQuery.admin_id" placeholder="请选择前端人员" clearable style="width: 300px">
             <el-option v-for="(item,index) in userList" :key="index" :label="item.username" :value="item.id"/>
           </el-select>
@@ -20,8 +15,8 @@
           <el-input v-model="listQuery.mobile" placeholder="请输入用户手机号" style="width: 200px;" class="filter-item"
                     @keyup.enter.native="handleFilter"/>
         </el-form-item>
-        <el-form-item label="是否分配">
-          <el-select v-model="listQuery.status" placeholder="请选择分配状态" clearable style="width: 300px">
+        <el-form-item label="订单状态">
+          <el-select v-model="listQuery.status" placeholder="请选择订单状态" clearable style="width: 300px">
             <el-option v-for="(item,index) in allotStatus" :key="index" :label="item.label" :value="item.value"/>
           </el-select>
         </el-form-item>
@@ -141,7 +136,7 @@
       </el-table-column>
       <el-table-column label="状态" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.status | allotStatus }}</span>
+          <span>{{ row.status | payStatus }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
@@ -224,21 +219,37 @@
         bookType: 'xlsx',
         allotStatus: [
           {
-            label: "已分配",
-            value: 1
+            value: "",
+            label: "全部"
           },
           {
-            label: "未分配",
-            value: 0
+            value: "0",
+            label: "已发货"
           },
           {
-            label: "全部",
-            value: ""
-          }
+            value: 2,
+            label: "已签收"
+          },
+          {
+            value: 3,
+            label: "已退回"
+          },
+          {
+            value: 4,
+            label: "异常"
+          },
+          {
+            value: 5,
+            label: "其他"
+          },{
+            value: 6,
+            label: "完成"
+          },
         ]
       }
     },
     created() {
+      this.$store.commit("auth_role/RESET_LISTQUERY");
       this.$store.dispatch("auth_role/getAuthRoleList");
       this.$store.dispatch("area/getDeptList");
       this.$store.dispatch("user/getfrontUserList");

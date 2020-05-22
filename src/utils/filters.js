@@ -22,7 +22,7 @@ module.exports = {
   },
   payStatus: function(e) {
     const data = {
-      "1": "已发货",
+      "0": "已发货",
       "2": "已签收",
       "3": "已退回",
       "4": "异常",

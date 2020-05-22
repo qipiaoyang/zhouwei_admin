@@ -81,6 +81,7 @@ const actions = {
       adminId: state.listQuery.adminId,
       status: state.listQuery.status
     }
+    console.log(data, "data=========");
     await getOrderList(data).then(response => {
       if (response.errno === 0) {
         commit("SET_ROLELIST", response.data.data);

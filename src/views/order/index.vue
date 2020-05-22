@@ -10,11 +10,6 @@
           <el-input v-model="listQuery.mobile" placeholder="请输入用户手机号" style="width: 200px;" class="filter-item"
                     @keyup.enter.native="handleFilter"/>
         </el-form-item>
-        <el-form-item label="后端人员" class="filter-item" v-if="dept_id == 1">
-          <el-select v-model="listQuery.adminId" placeholder="请选择后端人员" clearable style="width: 200px">
-            <el-option v-for="(item,index) in userList" :key="index" :label="item.username" :value="item.id"/>
-          </el-select>
-        </el-form-item>
         <el-form-item label="订单状态" class="filter-item">
           <el-select v-model="listQuery.status" placeholder="请选择后端人员" clearable style="width: 200px">
             <el-option v-for="(item,index) in orderStatus" :key="index" :label="item.label" :value="item.value"/>
@@ -55,10 +50,8 @@
       fit
       highlight-current-row
       style="width: 100%;"
-      @sort-change="sortChange"
     >
-      <el-table-column label="ID" prop="id" sortable="custom" align="center"
-                       :class-name="getSortClass('id')">
+      <el-table-column label="ID" prop="id" sortable="custom" align="center">
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
         </template>
@@ -176,7 +169,7 @@
             label: "全部"
           },
           {
-            value: 1,
+            value: "0",
             label: "已发货"
           },
           {
@@ -202,17 +195,25 @@
       }
     },
     created() {
-      this.$store.dispatch("order/getOrderList", this.adminId);
-      this.$store.dispatch("area/getDeptList");
-      this.$store.dispatch("user/getendUserList");
+      this.$store.commit("auth_role/SET_LISTQUERY", {
+          page: 1,
+          size: 10,
+          name: undefined,
+          order: "id desc",
+          time: [],
+          dept_id: this.dept_id,
+          mobile: "",
+          status: "",
+          admin_id: this.adminId
+      });
+      this.$store.dispatch("auth_role/getAuthRoleList");
     },
     computed: {
       ...mapState({
-        token: state => state.order.token,
-        roleList: state => state.order.roleList,
-        listQuery: state => state.order.listQuery,
-        total: state => state.order.total,
-        listLoading: state => state.order.listLoading,
+        roleList: state => state.auth_role.roleList,
+        listQuery: state => state.auth_role.listQuery,
+        total: state => state.auth_role.total,
+        listLoading: state => state.auth_role.listLoading,
         adminId: state => state.app.admin_id,
         userList: state => state.user.userList,
         dept_id: state => state.app.dept_id,
@@ -221,28 +222,49 @@
     methods: {
       // 重置功能
       resetList() {
-        this.$store.commit("order/RESET_LISTQUERY")
-        this.$store.dispatch("order/getOrderList", this.adminId);
+        this.$store.commit("auth_role/SET_LISTQUERY", {
+          page: 1,
+          size: 10,
+          name: undefined,
+          order: "id desc",
+          time: [],
+          dept_id: this.dept_id,
+          mobile: "",
+          status: "",
+          admin_id: this.adminId
+        });
+        this.$store.dispatch("auth_role/getAuthRoleList");
       },
       // 获取列表
       getList() {
-        this.$store.dispatch("order/getOrderList", this.adminId);
+        this.$store.dispatch("auth_role/getAuthRoleList");
       },
       // 启用禁用
       handleVisible(row, status) {
         var that = this;
-        this.$store.commit("order/SET_ID", row.id);
-        this.$store.dispatch("order/changeVisibleOrder", {status: status}).then((e) => {
+        this.$store.commit("auth_role/SET_ID", row.id);
+        this.$store.dispatch("auth_role/changeVisibleAuthRole", {status: status}).then((e) => {
           if(e.success) {
             that.$notify({
-              title: row.status ? '禁用成功' : "启用成功",
+              title: "修改成功",
               type: 'success',
               duration: 2000
             });
-            that.$store.dispatch("order/getOrderList", this.adminId);
+            this.$store.commit("auth_role/SET_LISTQUERY", {
+              page: 1,
+              size: 10,
+              name: undefined,
+              order: "id desc",
+              time: [],
+              dept_id: this.dept_id,
+              mobile: "",
+              status: "",
+              admin_id: this.adminId
+            });
+            this.$store.dispatch("auth_role/getAuthRoleList");
           } else {
             that.$notify({
-              title: row.staus ? '禁用失败' : "启用失败",
+              title: "修改失败",
               type: 'success',
               duration: 2000
             });
@@ -252,27 +274,9 @@
       // 过滤
       handleFilter() {
         this.listQuery.page = 1;
-        this.$store.commit("order/SET_LISTQUERY", this.listQuery)
-        this.$store.dispatch("order/getOrderList", this.adminId);
+        this.$store.commit("auth_role/SET_LISTQUERY", this.listQuery)
+        this.$store.dispatch("auth_role/getAuthRoleList");
       },
-      sortChange(data) {
-        const {prop, order} = data
-        if (prop === 'id') {
-          if(order === "ascending") {
-            this.listQuery.order = "asc"
-          } else if(order === "descending") {
-            this.listQuery.order = "desc";
-          } else {
-            this.listQuery.order = null;
-          }
-          this.$store.commit("order/SET_LISTQUERY", this.listQuery)
-          this.$store.dispatch("order/getOrderList", this.adminId);
-        }
-      },
-      getSortClass: function (key) {
-        const sort = this.listQuery.sort
-        return sort === `+${key}` ? 'ascending' : 'descending'
-      }
     }
   };
 </script>
