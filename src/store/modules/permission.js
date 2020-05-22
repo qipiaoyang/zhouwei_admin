@@ -1,4 +1,4 @@
-import { asyncRoutes, constantRoutes, endRoutes, frontRoutes  } from '@/router'
+import { asyncRoutes, constantRoutes, frontRoutes  } from '@/router'
 
 /**
  * Use meta.role to determine if the current user has permission
@@ -51,11 +51,9 @@ const actions = {
     return new Promise(resolve => {
       let accessedRoutes;
       if(dept_id == 1) {
-        accessedRoutes = frontRoutes.concat(endRoutes,asyncRoutes);
+        accessedRoutes = frontRoutes.concat(asyncRoutes);
       } else if(dept_id == 2) {
         accessedRoutes = frontRoutes;
-      } else if(dept_id == 3) {
-        accessedRoutes = endRoutes;
       } else {
         accessedRoutes = [];
       }
