@@ -71,6 +71,12 @@
           <span>{{ row.admin_id }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="用户地址" align="center">
+        <template slot-scope="{row}">
+          <span v-if="row.province_num != row.city_num">{{ row.province }}{{ row.city }}{{ row.county}}{{row.town}}{{row.addr}}</span>
+          <span v-else>{{ row.province }}{{ row.county}}{{row.addr}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="备注"  align="center">
         <template slot-scope="{row}">
           <span>{{ row.mark }}</span>
