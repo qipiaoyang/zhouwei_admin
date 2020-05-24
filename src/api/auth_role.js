@@ -60,3 +60,16 @@ export function deleteAuthRole(id) {
     method: 'delete',
   })
 }
+
+/**
+ * 删除用户
+ * @param params
+ */
+export function updateAuthRoleAll(data) {
+  return request({
+    url: 'admin/v1/area/batchDelete',
+    method: 'delete',
+    data: data
+  })
+}
+

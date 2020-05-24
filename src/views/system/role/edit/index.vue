@@ -57,7 +57,6 @@
             { required: true, message: "请输入地址详细信息", trigger: "blur" }
           ],
           name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
-          town: [{ required: true, message: "请输入乡镇", trigger: "blur" }],
           mobile: [{ required: true, message: "请输入手机号", trigger: "blur" }]
         },
         props: {
@@ -91,6 +90,9 @@
             that.formObj.admin_id = that.formObj.ids.split(",")[0];
             that.formObj.dept_id = that.formObj.ids.split(",")[1];
             delete that.formObj.ids;
+            if(!that.formObj.town) {
+              that.formObj.town = 0;
+            }
             this.$store.dispatch("auth_role/updateAuthRole", that.formObj).then((e) => {
               if(e.success) {
                 that.$notify({

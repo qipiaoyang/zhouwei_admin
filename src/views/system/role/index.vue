@@ -50,6 +50,12 @@
           </el-button>
         </el-form-item>
         <el-form-item class="filter-item">
+          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit"
+                     @click="handleDeleteAll">
+            批量删除
+          </el-button>
+        </el-form-item>
+        <el-form-item class="filter-item">
           <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh"
                      @click="resetList">
             重置
@@ -275,6 +281,28 @@
         this.$store.commit("auth_role/SET_ALLOTVISIBLE", true);
         this.$store.dispatch("user/getendUserList");
       },
+      // 批量删除订单
+      handleDeleteAll() {
+        var that = this;
+        this.$store.dispatch("auth_role/deleteAuthRoleAll").then((e) => {
+          if(e.success) {
+            that.$notify({
+              title: '删除订单成功',
+              type: 'success',
+              duration: 2000
+            });
+            that.$store.commit("auth_role/RESET_LISTQUERY");
+            that.$store.dispatch("auth_role/getAuthRoleList");
+          } else {
+            that.$notify({
+              title: '删除订单失败',
+              message: e.data.errmsg,
+              type: 'fail',
+              duration: 2000
+            });
+          }
+        });
+      },
       handleSelectionChange(val) {
         this.$store.commit("auth_role/SET_MULTIPLESELECTION", val);
       },
@@ -342,7 +370,7 @@
               duration: 2000
             });
           }
-        });;
+        });
       },
       // 过滤
       handleFilter() {

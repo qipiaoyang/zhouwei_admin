@@ -1,4 +1,4 @@
-import {getAuthRoleList, createAuthRole, getAuthRoleInfo, updateAuthRole } from "@/api/auth_role.js";
+import {getAuthRoleList, createAuthRole, getAuthRoleInfo, updateAuthRole, updateAuthRoleAll } from "@/api/auth_role.js";
 import { getTownList } from "@/api/area.js";
 const state = {
 
@@ -174,6 +174,21 @@ const actions = {
   async deleteAuthRole({commit, dispatch, state}, { id, data}) {
     var that = this;
     const result = await updateAuthRole({ id: id, data: data}).then((e) => {
+      if (e.errno === 0) {
+        commit("SET_ID", "");
+        return {success: true};
+      } else {
+        return {success: false};
+      }
+    })
+    return result;
+  },
+  async deleteAuthRoleAll({commit, dispatch, state}) {
+    var that = this;
+    const ids = state.multipleSelection.map((item) => {
+      return item.id;
+    })
+    const result = await updateAuthRoleAll({ ids: ids.join(",") }).then((e) => {
       if (e.errno === 0) {
         commit("SET_ID", "");
         return {success: true};
