@@ -17,6 +17,9 @@
       <el-form-item label="邮箱" prop="mobile">
         <el-input v-model="datainfo.email" placeholder="请输入邮箱"/>
       </el-form-item>
+      <el-form-item label="密码" prop="password">
+        <el-input v-model="datainfo.password" placeholder="请输入密码"/>
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="cancelDialog">
@@ -58,6 +61,7 @@
         let that = this;
         this.$refs['dataForm'].validate((valid) => {
           if(valid) {
+
             this.$store.dispatch("user/updateUser", that.datainfo).then((e) => {
               if(e.success) {
                 that.$notify({

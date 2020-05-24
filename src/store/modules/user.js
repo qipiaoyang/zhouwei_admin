@@ -109,7 +109,8 @@ const actions = {
           username: response.data.username,
           mobile: response.data.mobile,
           email: response.data.email,
-          dept_id: response.data.dept_id
+          dept_id: response.data.dept_id,
+          password: ""
         });
         commit("SET_ID", response.data.id);
         commit("SET_EDITVISIBLE", true);
