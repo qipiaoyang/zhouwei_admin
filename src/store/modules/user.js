@@ -12,6 +12,7 @@ const state = {
     size: 10,
     name: undefined,
     order: "update_time desc",
+    status: 1
   },
   datainfo: {
     username: "",
@@ -53,6 +54,7 @@ const mutations = {
       size: 10,
       name: undefined,
       order: "update_time desc",
+      status: 1
     }
   }
 }

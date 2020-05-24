@@ -84,7 +84,7 @@
             编辑
           </el-button>
           <el-button :type="row.status ? 'danger' : 'success'" size="mini" @click="handleVisible(row)">
-            {{ row.status ? "禁用" : "启用" }}
+            {{ row.status ? "删除" : "启用" }}
           </el-button>
         </template>
       </el-table-column>
