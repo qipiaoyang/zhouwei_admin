@@ -68,7 +68,7 @@ export function deleteAuthRole(id) {
 export function updateAuthRoleAll(data) {
   return request({
     url: 'admin/v1/area/batchDelete',
-    method: 'delete',
+    method: 'post',
     data: data
   })
 }
