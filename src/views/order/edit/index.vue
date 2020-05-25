@@ -25,6 +25,9 @@
       <el-form-item label="手机号码" prop="mobile">
         <el-input v-model="formObj.mobile" placeholder="请输入手机号码" style="width: 400px;"/>
       </el-form-item>
+      <el-form-item label="备注" prop="mark">
+        <el-input v-model="formObj.mark" placeholder="请输入备注" style="width: 400px;"/>
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="cancelDialog">
@@ -91,7 +94,7 @@
             this.$store.dispatch("auth_role/updateAuthRole", that.formObj).then((e) => {
               if(e.success) {
                 that.$notify({
-                  title: '编辑角色成功',
+                  title: '编辑订单成功',
                   type: 'success',
                   duration: 2000
                 });
@@ -99,7 +102,7 @@
                 that.$store.dispatch("auth_role/getAuthRoleList");
               } else {
                 that.$notify({
-                  title: '编辑角色失败',
+                  title: '编辑订单失败',
                   message: e.data.errmsg,
                   type: 'fail',
                   duration: 2000

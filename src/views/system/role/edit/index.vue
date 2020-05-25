@@ -30,6 +30,12 @@
       <el-form-item label="手机号码" prop="mobile">
         <el-input v-model="formObj.mobile" placeholder="请输入手机号码" style="width: 400px;"/>
       </el-form-item>
+      <el-form-item label="备注" prop="mark">
+        <el-input v-model="formObj.mark" placeholder="请输入备注" style="width: 400px;"/>
+      </el-form-item>
+      <el-form-item label="快递单号" prop="courier_num">
+        <el-input v-model="formObj.courier_num" placeholder="请输入快递单号" style="width: 400px;"/>
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="cancelDialog">

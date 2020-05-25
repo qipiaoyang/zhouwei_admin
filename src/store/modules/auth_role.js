@@ -18,7 +18,7 @@ const state = {
     dept_id: "",
     mobile: "",
     status: "",
-    admin_id: ""
+    admin_id: "",
   },
   datainfo: {
     role_name: "",
@@ -117,6 +117,8 @@ const actions = {
           address_desc: response.data.addr,
           name: response.data.name,
           mobile: response.data.mobile,
+          mark: response.data.mark,
+          courier_num: response.data.courier_num,
         });
         dispatch("getTownList", { pid: response.data.county })
         commit("SET_ID", response.data.id);
